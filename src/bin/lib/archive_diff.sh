@@ -74,7 +74,7 @@ function get_ext() {
   # 変数展開結果を確認
   if [ "${ext}" = "gz" ]; then
     # gzの場合、2重拡張子を確認 ※tar.gzのみ対応
-    if [ "$(basename ${path} .tar.gz)" = "$(basename ${path})" ]; then
+    if [ "$(basename ${path} .tar.gz)" != "$(basename ${path})" ]; then
       ext="tar.gz"
     fi
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -eux
 #===================================================================================================
 #
 # in-house-swagger installer
@@ -7,12 +8,16 @@
 #---------------------------------------------------------------------------------------------------
 # 設定
 #---------------------------------------------------------------------------------------------------
-dir_script="$(dirname \"$0\")"
-cd "$(cd \"${dir_script}\"; pwd)" || exit 6
+dir_script="$(dirname $0)"
+cd "$(cd ${dir_script}; pwd)" || exit 6
 
 # 共通設定
 readonly DIR_BASE="$(cd ..; pwd)"
-. ./setenv.sh
+. "./setenv"
+
+# loggingユーティリティ
+readonly PATH_LOG="${DIR_LOG}/$(basename \"$0\" .sh).log"
+. "${DIR_BIN_LIB}/logging_utils.sh"
 
 
 #---------------------------------------------------------------------------------------------------
@@ -20,57 +25,326 @@ readonly DIR_BASE="$(cd ..; pwd)"
 #---------------------------------------------------------------------------------------------------
 # curl
 if [[ "$(which curl)x" = "x" ]]; then
-  echo "curl is NOT installed." >&2
-  exit 1
+  log.error_console "curl がインストールされていません。"
+  exit ${EXITCODE_ERROR}
 fi
 
 
 #---------------------------------------------------------------------------------------------------
 # 関数定義
 #---------------------------------------------------------------------------------------------------
-# なし
+#-------------------------------------------------------------------------------
+# ダウンロード
+#-------------------------------------------------------------------------------
+function local.download() {
+  local _USAGE="Usage: ${FUNCNAME[0]} URL"
+
+  log.save_indent
+  log.info_console "${FUNCNAME[0]} $*"
+  log.add_indent
+
+  # 引数チェック
+  if [[ $# -ne 1 ]]; then
+    log.error_console "${_USAGE}"
+    log.restore_indent
+    return ${EXITCODE_ERROR}
+  fi
+
+  local _url="$1"
+  local _path_output="${DIR_ARCHIVE}/$(basename ${_url})"
+  local _exitcode=${EXITCODE_SUCCESS}
+  local _retcode=${EXITCODE_SUCCESS}
+
+  # ダウンロードディレクトリ作成
+  if [[ ! -d "${DIR_ARCHIVE}" ]]; then
+    mkdir -p "${DIR_ARCHIVE}"
+    _retcode=$?
+    if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+      log.error_console "ディレクトリを作成できません。target:${DIR_ARCHIVE}, retcode:${_retcode}"
+      log.restore_indent
+      return ${EXITCODE_ERROR}
+    fi
+  fi
+
+  # ダウンロード
+  curl                                                                                               \
+    --silent                                                                                         \
+    --max-time ${DL_TIMEOUT}                                                                         \
+    --location                                                                                       \
+    --output "${_path_output}"                                                                       \
+    --request GET                                                                                    \
+    --url "${_url}"                                                                                |
+  log.debug_console
+  _retcode=${PIPESTATUS[0]}
+
+  if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+    log.error_console "ダウンロードに失敗しました。target:${_url}, retcode:${_retcode}"
+    _exitcode=${EXITCODE_ERROR}
+  else
+    log.info_console "downloaded ${_path_output}"
+  fi
+
+  log.restore_indent
+  return ${_exitcode}
+}
+
+#-------------------------------------------------------------------------------
+# 展開
+#-------------------------------------------------------------------------------
+function local.extract() {
+  local _USAGE="Usage: ${FUNCNAME[0]} FROM_PATH TO_DIR"
+
+  log.save_indent
+  log.info_console "${FUNCNAME[0]} $*"
+  log.add_indent
+
+  # 引数チェック
+  if [[ $# -ne 2 ]]; then
+    log.error_console "${_USAGE}"
+    log.restore_indent
+    return ${EXITCODE_ERROR}
+  fi
+
+  # fromファイル
+  local _path_from="$1"
+  if [[ ! -f "${_path_from}" ]]; then
+    log.error_console "${_path_from} が存在しません。"
+    log.restore_indent
+    return ${EXITCODE_ERROR}
+  fi
+
+  # 展開ディレクトリ
+  local _dir_to="$2"
+  if [[ -d "${_dir_to}" ]]; then
+    log.warn_console "${_dir_to} はすでに存在するため、削除しました。"
+    rm -fr "${_dir_to}"
+  fi
+  mkdir -p "${_dir_to}"
+
+  # 拡張子判定
+  local _ext_from="$(get_ext ${_path_from})"
+
+  # 展開
+  local _tmp_path="${_dir_to}/$(basename ${_path_from})"
+  cd "${_dir_to}"
+  mv "${_path_from}" "${_dir_to}/"
+  if [[ "zip" = "${_ext_from}" ]]; then
+    # zip
+    log.info_console "unzip \"${_tmp_path}\""
+    unzip "${_tmp_path}" 2>&1 | log.info_console
+
+  elif [[ "tar.gz" = "${_ext_from}" || "tgz" = "${_ext_from}" ]]; then
+    # tar.gz
+    log.info_console "tar xvzf \"${_tmp_path}\""
+    tar xvzf "${_tmp_path}" 2>&1 | log.info_console
+
+  else
+    log.error_console "展開に対応していない拡張子です。target:${_ext_from}"
+  fi
+  mv "${_tmp_path}" "${_path_from}"
+  cd - > /dev/null
+
+  # 展開結果を一つ上のディレクトリに移動
+  local _dirname_extracted="$(ls ${_dir_to} | head -n 1)"
+  mv "${_dir_to}/${_dirname_extracted}"/* "${_dir_to}/"
+  rm -fr "${_dir_to}/${_dirname_extracted}"
+
+  local _exitcode=${EXITCODE_SUCCESS}
+  local _retcode=${EXITCODE_SUCCESS}
+
+  log.restore_indent
+  return ${_exitcode}
+}
+
 
 
 #---------------------------------------------------------------------------------------------------
 # 事前処理
 #---------------------------------------------------------------------------------------------------
+exitcode=${EXITCODE_SUCCESS}
+retcode=${EXITCODE_SUCCESS}
+
 #-------------------------------------------------------------------------------
 # ダウンロード
 #-------------------------------------------------------------------------------
+log.info_console "ダウンロード"
+log.add_indent
+
+if [ -d "${DIR_ARCHIVE}" ]; then
+  log.info_console "ダウンロード済みのためスキップしました。"
+
+else
+  # jetty
+  local.download "${DOWNLOAD_URL_JETTY}"
+  retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+    exitcode=${retcode}
+  fi
+
+  # groovy
+  local.download "${DOWNLOAD_URL_GROOVY}"
+  retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+    exitcode=${retcode}
+  fi
+
+  # swagger-generator
+  local.download "${DOWNLOAD_URL_GENERATOR}"
+  retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+    exitcode=${retcode}
+  fi
+
+  # swagger-codegen-cli
+  local.download "${DOWNLOAD_URL_CODEGEN_CLI}"
+  retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+    exitcode=${retcode}
+  fi
+
+  # swagger-editor
+  local.download "${DOWNLOAD_URL_EDITOR}"
+  retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+    exitcode=${retcode}
+  fi
+
+  # swagger-ui
+  local.download "${DOWNLOAD_URL_UI}"
+  retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+    exitcode=${retcode}
+  fi
+fi
+
+if [[ ${EXITCODE_SUCCESS} -ne ${exitcode} ]]; then
+  log.error_console "ダウンロードでエラーが発生しました。"
+  exit ${exitcode}
+fi
+log.remove_indent
 
 
 #---------------------------------------------------------------------------------------------------
 # 本処理
 #---------------------------------------------------------------------------------------------------
+log.info_console "インストール"
+log.add_indent
+
 #-------------------------------------------------------------------------------
 # jetty
 #-------------------------------------------------------------------------------
+log.info_console "jetty"
+log.add_indent
 
-#-------------------------------------------------------------------------------
-# jetty - 設定
-#-------------------------------------------------------------------------------
+local.extract "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_JETTY})" "${DIR_JETTY}"
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
 
 #-------------------------------------------------------------------------------
 # groovy
 #-------------------------------------------------------------------------------
+log.info_console "groovy"
+log.add_indent
+
+local.extract "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GROOVY})" "${DIR_GROOVY}"
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
 
 #-------------------------------------------------------------------------------
 # swagger-editor
 #-------------------------------------------------------------------------------
+log.info_console "swagger-editor"
+log.add_indent
+
+local.extract "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_EDITOR})" "${DIR_EDITOR}"
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
 
 #-------------------------------------------------------------------------------
 # swagger-ui
 #-------------------------------------------------------------------------------
+log.info_console "swagger-ui"
+log.add_indent
+
+local.extract "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_UI})" "${DIR_UI}"
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
 
 #-------------------------------------------------------------------------------
 # swagger-generator
 #-------------------------------------------------------------------------------
+log.info_console "swagger-generator"
+log.add_indent
+
+log.info_console "cp -pf \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})\" \"${PATH_GENERATOR}\""
+cp -pf "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})" "${PATH_GENERATOR}"
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
 
 #-------------------------------------------------------------------------------
 # swagger-codegen-cli
 #-------------------------------------------------------------------------------
+log.info_console "swagger-codegen-cli"
+log.add_indent
+
+log.info_console "cp -pf \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_CODEGEN_CLI})\" \"${PATH_CODEGEN_CLI}\""
+cp -pf "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_CODEGEN_CLI})" "${PATH_CODEGEN_CLI}"
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
+
+#-------------------------------------------------------------------------------
+# jetty - 設定
+#-------------------------------------------------------------------------------
+log.info_console "jetty-config"
+log.add_indent
+
+# context.xml
+log.info_console "cp \"${DIR_CONFIG}/install/contexts\"/* \"${DIR_JETTY}/webapps/\""
+cp "${DIR_CONFIG}/install/contexts"/* "${DIR_JETTY}/webapps/"
+
+# TODO ログ出力設定とかも、ここで定義
+retcode=$?
+if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
+  exitcode=${retcode}
+fi
+
+log.remove_indent
+
 
 
 #---------------------------------------------------------------------------------------------------
 # 事後処理
 #---------------------------------------------------------------------------------------------------
+# 結果判定
+if [[ ${EXITCODE_SUCCESS} -ne ${exitcode} ]]; then
+  log.error_console "インストールでエラーが発生しました。"
+
+else
+  log.info_console "インストールが完了しました。"
+fi
+
+exit ${exitcode}

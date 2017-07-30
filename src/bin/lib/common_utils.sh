@@ -162,3 +162,29 @@ function _urldecode() {
 
   return 0
 }
+
+#------------------------------------------------------------------------------
+# 拡張子取得
+#
+# 引数
+#   $1: 対象ファイルパス
+#------------------------------------------------------------------------------
+function get_ext() {
+  local _path="$1"
+  local _ext="${_path##*.}"
+
+  # 変数展開結果を確認
+  if [ "${_ext}" = "gz" ]; then
+    # gzの場合、2重拡張子を確認 ※tar.gzのみ対応
+    if [ "$(basename ${_path} .tar.gz)" != "$(basename ${_path})" ]; then
+      _ext="tar.gz"
+    fi
+
+  elif [ "${_ext}" = "${_path}" ]; then
+    # pathそのままの場合、拡張子なし
+    _ext=""
+  fi
+
+  echo "${_ext}"
+  return ${EXITCODE_SUCCESS}
+}
