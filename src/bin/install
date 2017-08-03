@@ -42,6 +42,28 @@ fi
 #-------------------------------------------------------------------------------
 # ダウンロード
 #-------------------------------------------------------------------------------
+function exit_on_fail() {
+  local _USAGE="Usage: ${FUNCNAME[0]} RETURN_CODE"
+  local _retcode=$1
+
+  if [[ $# -ne 1 ]]; then
+    log.error_console "${_USAGE}"
+    _retcode=${EXITCODE_ERROR}
+  fi
+
+  if [[ ${_retcode} -ne ${EXITCODE_SUCCESS} ]]; then
+    {
+      echo "--------------------------------------------------"
+      echo " INSTALL FAILURE"
+      echo "--------------------------------------------------"
+    } | log.error_console
+    exit ${EXITCODE_ERROR}
+  fi
+
+}
+#-------------------------------------------------------------------------------
+# ダウンロード
+#-------------------------------------------------------------------------------
 function local.download() {
   local _USAGE="Usage: ${FUNCNAME[0]} URL"
 
@@ -227,7 +249,11 @@ retcode=${EXITCODE_SUCCESS}
 #---------------------------------------------------------------------------------------------------
 # 本処理
 #---------------------------------------------------------------------------------------------------
-log.info_console "インストール"
+{
+  echo "--------------------------------------------------"
+  echo " INSTALL"
+  echo "--------------------------------------------------"
+} | log.info_console
 log.add_indent
 
 
@@ -236,9 +262,7 @@ log.add_indent
 #-------------------------------------------------------------------------------
 local.install "jetty" "${DOWNLOAD_URL_JETTY}" "${DIR_JETTY}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 log.info_console "jetty-config"
 log.add_indent
@@ -251,9 +275,7 @@ java -jar ${DIR_JETTY}/start.jar                                                
   jetty.base="${DIR_JETTY}"                                                                   2>&1 |
 log.info_console
 retcode=${PIPESTATUS[0]}
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 log.remove_indent
 
 # context.xml
@@ -262,9 +284,7 @@ log.add_indent
 log.info_console "cp \"${DIR_CONFIG}/install/contexts\"/* \"${DIR_JETTY}/webapps/\""
 cp "${DIR_CONFIG}/install/contexts"/* "${DIR_JETTY}/webapps/"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 log.remove_indent
 
 # TODO ログ出力設定も、ここで定義
@@ -277,9 +297,7 @@ log.remove_indent
 #-------------------------------------------------------------------------------
 local.install "groovy" "${DOWNLOAD_URL_GROOVY}" "${DIR_GROOVY}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 
 #-------------------------------------------------------------------------------
@@ -287,9 +305,7 @@ fi
 #-------------------------------------------------------------------------------
 local.install "swagger-editor" "${DOWNLOAD_URL_EDITOR}" "${DIR_EDITOR}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 
 #-------------------------------------------------------------------------------
@@ -297,9 +313,7 @@ fi
 #-------------------------------------------------------------------------------
 local.install "swagger-ui" "${DOWNLOAD_URL_UI}" "${DIR_UI}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 
 #-------------------------------------------------------------------------------
@@ -311,24 +325,18 @@ log.add_indent
 
 # ダウンロード
 local.gracefull_download "${DOWNLOAD_URL_GENERATOR}"
-retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 # インストール
 log.info_console "インストール"
 log.add_indent
 
-log.info_console "cp -pf \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})\" \"${PATH_GENERATOR}\""
-cp -pf "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})" "${PATH_GENERATOR}"
+log.info_console "ln -fs \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})\" \"${PATH_GENERATOR}\""
+ln -fs "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})" "${PATH_GENERATOR}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 log.remove_indent
-
 log.restore_indent
 
 
@@ -342,20 +350,16 @@ log.add_indent
 # ダウンロード
 local.gracefull_download "${DOWNLOAD_URL_CODEGEN_CLI}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 # インストール
 log.info_console "インストール"
 log.add_indent
 
-log.info_console "cp -pf \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_CODEGEN_CLI})\" \"${PATH_CODEGEN_CLI}\""
-cp -pf "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_CODEGEN_CLI})" "${PATH_CODEGEN_CLI}"
+log.info_console "ln -fs \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_CODEGEN_CLI})\" \"${PATH_CODEGEN_CLI}\""
+ln -fs "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_CODEGEN_CLI})" "${PATH_CODEGEN_CLI}"
 retcode=$?
-if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-  exit ${retcode}
-fi
+exit_on_fail ${retcode}
 
 log.remove_indent
 
@@ -372,19 +376,25 @@ fi
 mkdir -p "${dir_template_default}"
 
 # 展開
+log.info_console "unzip ${PATH_CODEGEN_CLI} -d \"${dir_template_work}\""
 unzip ${PATH_CODEGEN_CLI} -d "${dir_template_work}"
+retcode=$?
+exit_on_fail ${retcode}
+
 # templateディレクトリを移動
 find "${dir_template_work}" -mindepth 2 -maxdepth 2 -type f -name "*mustache"                      | # mustacheファイルをリスト
 xargs -I{} bash -c 'dirname {}'                                                                    | # ディレクトリをリスト
 uniq                                                                                               | # 一意に絞る
 xargs -I{} bash -c "mv {} ${dir_template_default}/"                                                  # サンプルディレクトリに移動
+
 # 展開ディレクトリを削除
 rm -fr "${dir_template_work}"
 
 log.info_console "デフォルトテンプレート"
+log.info_console "配置ディレクトリ: ${dir_template_default}"
 ls "${dir_template_default}"
-log.remove_indent
 
+log.remove_indent
 log.restore_indent
 
 
@@ -392,5 +402,10 @@ log.restore_indent
 #---------------------------------------------------------------------------------------------------
 # 事後処理
 #---------------------------------------------------------------------------------------------------
-log.info_console "インストールが完了しました。"
+log.clear_indent
+{
+  echo "--------------------------------------------------"
+  echo " INSTALL SUCCESS"
+  echo "--------------------------------------------------"
+} | log.info_console
 exit ${exitcode}
