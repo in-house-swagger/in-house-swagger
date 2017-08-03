@@ -7,24 +7,97 @@
 #---------------------------------------------------------------------------------------------------
 # 設定
 #---------------------------------------------------------------------------------------------------
-dir_script="$(dirname \"$0\")"
-cd "$(cd \"${dir_script}\"; pwd)" || exit 6
+dir_script="$(dirname $0)"
+cd "$(cd ${dir_script}; pwd)" || exit 6
 
 # 共通設定
 readonly DIR_BASE="$(cd ..; pwd)"
-. ./setenv.sh
+. "./setenv"
 
+# loggingユーティリティ
+readonly PATH_LOG="${DIR_LOG}/$(basename \"$0\" .sh).log"
+. "${DIR_BIN_LIB}/logging_utils.sh"
+
+
+# Generateモード
+readonly GEN_MODE_DEFAULT="DEFAULT"
+readonly GEN_MODE_CUSTOM_JAR="JAR"
+readonly GEN_MODE_CUSTOM_GROOVY="GROOVY"
 
 #---------------------------------------------------------------------------------------------------
 # 前提チェック
 #---------------------------------------------------------------------------------------------------
 # swagger-codegen-cli
+if [[ ! -f "${PATH_CODEGEN_CLI}" ]]; then
+  log.error_console "$(basename ${PATH_CODEGEN_CLI}) がインストールされていません。"
+  exit ${EXITCODE_ERROR}
+fi
 
 
 #---------------------------------------------------------------------------------------------------
 # 関数定義
 #---------------------------------------------------------------------------------------------------
-# なし
+#--------------------------------------------------------------------------------
+# usage
+#--------------------------------------------------------------------------------
+function usage() {
+  cat <<_EOT_
+    Usage:
+      `basename $0` [Options] SWAGGER_CODEGEN_CLI_ARGS
+
+    Description:
+      カスタムlanguageを考慮して、swagger-codegen-cliを実行します。
+
+    Options:
+      -cl CUSTOM_LANGUAGE_NAME | --custom-language CUSTOM_LANGUAGE_NAME
+        カスタムlanguageでのリソース生成。
+        swagger-codegen-cli meta から作成した jar形式 と
+        SwaggerCodegen.main を呼び出す groovy形式 に対応しています。
+          jar   ) https://github.com/swagger-api/swagger-codegen#making-your-own-codegen-modules
+          groovy) http://qiita.com/Quramy/items/c583f3213f0b77ff1bac
+
+    Args:
+      1〜: swagger-codegen-cli の引数
+
+    Sample:
+      swagger-codegen-cli で提供されているデフォルトlanguageでリソースを生成する場合:
+        $0 \\
+          generate \\
+          -i path/to/swagger.json \\
+          -l typescript-angular \\
+          -o ../output/typescript-angular
+
+      デフォルトlanguage + カスタムtemplate でリソースを生成する場合:
+        $0 \\
+          generate \\
+          -i path/to/swagger.json \\
+          -l typescript-angular \\
+          -t ../config/templates/template_name \\
+          -o ../output/typescript-angular
+
+      カスタムlanguage でリソースを生成する場合:
+        $0 \\
+          -cl CustomLanguageName \\
+          -i path/to/swagger.json \\
+          -o ../output/CustomLanguageName
+
+      jar形式のカスタマイズ用スキャフォルドを生成する場合:
+        $0 \\
+          meta \\
+          -n CustomLanguageName \\
+          -p com.my.company.codegen \\
+          -o ../output/CustomLanguageName
+
+      デフォルトlanguageの一覧を表示する場合:
+        $0 langs
+
+    ReturnCode:
+      ${EXITCODE_SUCCESS}: 正常終了
+      ${EXITCODE_ERROR}: エラー発生時
+
+_EOT_
+  exit ${EXITCODE_ERROR}
+}
 
 
 #---------------------------------------------------------------------------------------------------
@@ -33,24 +106,96 @@ readonly DIR_BASE="$(cd ..; pwd)"
 #-------------------------------------------------------------------------------
 # オプション解析
 #-------------------------------------------------------------------------------
+gen_mode="${GEN_MODE_DEFAULT}"
+path_custom="-"
+dir_custom_templ="-"
+
+while :; do
+  case $1 in
+    -cl|--custom-language)
+      custom_lang="$2"
+      dir_cutom_lang="${DIR_CONFIG}/generators/${custom_lang}"
+      if [[ ! -d "${dir_cutom_lang}" ]]; then
+        log.error_console "${dir_cutom_lang} が存在しません。"
+        exit ${EXITCODE_ERROR}
+      fi
+
+      if [[ ! -d "${dir_cutom_lang}/generator" ]]; then
+        gen_mode="${GEN_MODE_CUSTOM_JAR}"
+        path_custom="${dir_cutom_lang}"/$(ls ${dir_cutom_lang} | head -n 1)
+
+      else
+        gen_mode="${GEN_MODE_CUSTOM_GROOVY}"
+        path_custom="${dir_cutom_lang}"/generator/$(ls ${dir_cutom_lang}/generator | head -n 1)
+        dir_custom_templ="${dir_cutom_lang}/template"
+      fi
+      shift 2
+      break
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      usage
+      exit ${EXITCODE_ERROR}
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
 
 
 #---------------------------------------------------------------------------------------------------
 # 本処理
 #---------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-# モード判定
-#-------------------------------------------------------------------------------
-# 組み込みgenerator
-  # そのまま、swagger-codegen-cliを起動
+retcode=${EXITCODE_SUCCESS}
 
-# カスタムgenerator - jar
+{
+  echo "GENERATE MODE                : ${gen_mode}"
+  echo "CUSTOM LANGUAGE FILE         : ${path_custom}"
+  echo "CUSTOM LANGUAGE TEMPLATE DIR : ${dir_custom_templ}"
+  echo "GENERATE START"
+} | log.info_console
+
+if [[ "${gen_mode}" = "${GEN_MODE_CUSTOM_JAR}" ]]; then
   # classpathの先頭に追加して、swagger-codegen-cliを実行
+  classpath="${path_custom}:${PATH_CODEGEN_CLI}"
+  java                                                                                             \
+    -cp "${classpath}"                                                                             \
+    io.swagger.codegen.SwaggerCodegen generate                                                     \
+    -l "${custom_lang}"                                                                            \
+    "$@"
 
-# カスタムgenerator - groovy
+elif [[ "${gen_mode}" = "${GEN_MODE_CUSTOM_GROOVY}" ]]; then
   # groovyにオプションを追加して実行
+  "${DIR_GROOVY}"/bin/groovy                                                                       \
+    "${path_custom}" generate                                                                      \
+    -l "${custom_lang}"                                                                            \
+    -t "${dir_custom_templ}"                                                                       \
+    "$@"
+
+else
+  # そのまま、swagger-codegen-cliを起動
+  java -jar ${PATH_CODEGEN_CLI} "$@"
+
+fi
+retcode=$?
+
 
 
 #---------------------------------------------------------------------------------------------------
 # 事後処理
 #---------------------------------------------------------------------------------------------------
+if [[ ${retcode} -eq ${EXITCODE_SUCCESS} ]]; then
+  log.info_console "--------------------------------------------------"
+  log.info_console " GENERATE SUCCESS."
+  log.info_console "--------------------------------------------------"
+else
+  log.error_console "--------------------------------------------------"
+  log.error_console "GENERATE FAILURE."
+  log.error_console "--------------------------------------------------"
+fi
+exit ${retcode}

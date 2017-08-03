@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+#set -eux
 #===================================================================================================
 #
 # Production Build
@@ -28,8 +28,8 @@ dir_cur_dist="${DIR_DIST}/${archive_name_with_dpend}"
 # build
 #---------------------------------------------------------------------------------------------------
 echo "出力ディレクトリのクリア"
-if [[ -d ${dir_cur_dist} ]]; then
-  rm -fr "${dir_cur_dist}"
+if [[ -d ${DIR_DIST} ]]; then
+  rm -fr "${DIR_DIST}"
 fi
 mkdir -p "${dir_cur_dist}"
 
