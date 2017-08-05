@@ -15,7 +15,7 @@ readonly DIR_BASE="$(cd ..; pwd)"
 . "./setenv"
 
 # loggingユーティリティ
-readonly PATH_LOG="${DIR_LOG}/$(basename \"$0\" .sh).log"
+readonly PATH_LOG="${DIR_LOG}/$(basename $0 .sh).log"
 . "${DIR_BIN_LIB}/logging_utils.sh"
 
 
@@ -24,18 +24,34 @@ readonly PATH_LOG="${DIR_LOG}/$(basename \"$0\" .sh).log"
 #---------------------------------------------------------------------------------------------------
 function start() {
   export JETTY_ARGS
+  log.info_teelog "in-house-swagger-server start..."
   ${DIR_JETTY}/bin/jetty.sh -d start >> ${PATH_LOG} 2>&1
-  return $?
+  local _retcode=$?
+
+  if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
+    log.info_teelog "in-house-swagger-server started. (port=${SERVER_PORT}, pid=$(cat ${DIR_JETTY}/jetty/jetty.pid))"
+  else
+    log.error_teelog "in-house-swagger-server start failed."
+  fi
+  return ${_retcode}
 }
 
 function stop() {
+  log.info_teelog "in-house-swagger-server stop..."
   ${DIR_JETTY}/bin/jetty.sh stop >> ${PATH_LOG} 2>&1
-  return $?
+  local _retcode=$?
+
+  if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
+    log.info_teelog "in-house-swagger-server stopped."
+  else
+    log.error_teelog "in-house-swagger-server stop failed."
+  fi
+  return ${_retcode}
 }
 
-function restert() {
-  ${DIR_JETTY}/bin/jetty.sh restart >> ${PATH_LOG} 2>&1
-  return $?
+function restart() {
+  stop
+  start
 }
 
 
@@ -46,7 +62,8 @@ exitcode=${EXITCODE_SUCCESS}
 
 # 引数チェック
 if [[ $# -ne 1 ]]; then
-  log.error_console "Usage: $(basenae $0) start|stop|restart"
+  log.error_console "Usage: $(basename $0) start|stop|restart"
+  exit ${EXITCODE_ERROR}
 fi
 
 # mode
@@ -66,7 +83,7 @@ elif [[ "${mode}" = "restart" ]]; then
   restart
   exitcode=$?
 else
-  log.error_console "想定外の起動モードです。mode:${mode}"
+  log.error_teelog "想定外の起動モードです。mode:${mode}"
   exitcode=${EXITCODE_ERROR}
 fi
 
