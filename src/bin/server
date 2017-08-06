@@ -29,7 +29,8 @@ function start() {
   local _retcode=$?
 
   if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
-    log.info_teelog "in-house-swagger-server started. (port=${SERVER_PORT}, pid=$(cat ${DIR_JETTY}/jetty/jetty.pid))"
+    log.info_teelog "in-house-swagger-server started. (port=${SERVER_PORT})"
+    ${DIR_JETTY}/bin/jetty.sh check | log.info_teelog
   else
     log.error_teelog "in-house-swagger-server start failed."
   fi
