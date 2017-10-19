@@ -365,6 +365,17 @@ ${DIR_SPEC_MGR}/bin/server stop
 retcode=$?
 exit_on_fail ${retcode}
 
+
+# 暗号化キーの生成
+log.save_indent
+log.info_console "暗号化キーの生成"
+log.add_indent
+
+log.info_console "${DIR_SPEC_MGR}/bin/mainte/generate_encrypt_key.sh"
+${DIR_SPEC_MGR}/bin/mainte/generate_encrypt_key.sh
+retcode=$?
+exit_on_fail ${retcode}
+
 log.remove_indent
 log.restore_indent
 
