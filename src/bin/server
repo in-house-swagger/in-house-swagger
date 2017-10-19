@@ -23,6 +23,7 @@ readonly PATH_LOG="${DIR_LOG}/$(basename $0 .sh).log"
 # 関数定義
 #---------------------------------------------------------------------------------------------------
 function start() {
+  # Jetty
   export JETTY_ARGS
   log.info_teelog "in-house-swagger-server start..."
   ${DIR_JETTY}/bin/jetty.sh -d start >> ${PATH_LOG} 2>&1
@@ -34,18 +35,41 @@ function start() {
   else
     log.error_teelog "in-house-swagger-server start failed."
   fi
+
+  # spec-mgr
+  log.info_teelog "swagger-spec-mgr start..."
+  ${DIR_SPEC_MGR}/bin/server start >> ${PATH_LOG} 2>&1
+  local _retcode=$?
+
+  if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
+    log.info_teelog "swagger-spec-mgr started. "
+  else
+    log.error_teelog "swagger-spec-mgr start failed."
+  fi
   return ${_retcode}
 }
 
 function stop() {
+  # Jetty
   log.info_teelog "in-house-swagger-server stop..."
-  ${DIR_JETTY}/bin/jetty.sh stop >> ${PATH_LOG} 2>&1
+  ${DIR_SPEC_MGR}/bin/server stop >> ${PATH_LOG} 2>&1
   local _retcode=$?
 
   if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
     log.info_teelog "in-house-swagger-server stopped."
   else
     log.error_teelog "in-house-swagger-server stop failed."
+  fi
+
+  # spec-mgr
+  log.info_teelog "swagger-spec-mgr stop..."
+  ${DIR_JETTY}/bin/jetty.sh stop >> ${PATH_LOG} 2>&1
+  local _retcode=$?
+
+  if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
+    log.info_teelog "swagger-spec-mgr stopped."
+  else
+    log.error_teelog "swagger-spec-mgr stop failed."
   fi
   return ${_retcode}
 }
