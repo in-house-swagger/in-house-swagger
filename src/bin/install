@@ -278,6 +278,10 @@ retcode=${PIPESTATUS[0]}
 exit_on_fail ${retcode}
 log.remove_indent
 
+# etc/jetty.conf
+log.info_console "console-capture"
+echo "console-capture.xml" >> ${DIR_JETTY}/etc/jetty.conf
+
 # context.xml
 log.info_console "context"
 log.add_indent
