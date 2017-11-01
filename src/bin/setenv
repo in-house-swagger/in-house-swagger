@@ -73,6 +73,8 @@ readonly DIR_JETTY="${DIR_MODULE}/jetty"
 readonly DIR_EDITOR="${DIR_MODULE}/swagger-editor"
 # swagger-ui
 readonly DIR_UI="${DIR_MODULE}/swagger-ui"
+# swagger-generator
+readonly DIR_GENERATOR="${DIR_MODULE}/swagger-generator"
 # swagger-spec-mgr
 readonly DIR_SPEC_MGR="${DIR_MODULE}/swagger-spec-mgr"
 
