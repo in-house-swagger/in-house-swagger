@@ -324,49 +324,6 @@ local.install "swagger-spec-mgr" "${DOWNLOAD_URL_SPEC_MGR}" "${DIR_SPEC_MGR}"
 retcode=$?
 exit_on_fail ${retcode}
 
-# デフォルトユーザ追加
-log.save_indent
-log.info_console "デフォルトユーザの追加"
-log.add_indent
-
-# サーバ起動
-log.info_console "${DIR_SPEC_MGR}/bin/server start"
-${DIR_SPEC_MGR}/bin/server start
-retcode=$?
-exit_on_fail ${retcode}
-
-# portを取得
-PORT_SPEC_MGR=$(                                                                                   \
-  cat ${DIR_SPEC_MGR}/config/swagger-spec-mgr.properties                                           |
-  grep "SERVER_PORT"                                                                               |
-  cut -d '=' -f 2                                                                                  \
-)
-# contextpathを取得
-CONTEXTPATH_SPEC_MGR=$(                                                                            \
-  cat ${DIR_SPEC_MGR}/config/application.yml                                                       |
-  grep "contextPath"                                                                               |
-  cut -d ':' -f 2                                                                                  |
-  _trim                                                                                            |
-  sed -e 's|"||g'                                                                                  \
-)
-
-# ユーザ追加
-curl                                                                                               \
-  --silent                                                                                         \
-  --max-time ${DL_TIMEOUT}                                                                         \
-  --location                                                                                       \
-  --request POST                                                                                   \
-  --url "localhost:${PORT_SPEC_MGR}${CONTEXTPATH_SPEC_MGR}/users"                                  |
-log.debug_console
-_retcode=${PIPESTATUS[0]}
-
-# サーバ停止
-log.info_console "${DIR_SPEC_MGR}/bin/server stop"
-${DIR_SPEC_MGR}/bin/server stop
-retcode=$?
-exit_on_fail ${retcode}
-
-
 # 暗号化キーの生成
 log.save_indent
 log.info_console "暗号化キーの生成"
