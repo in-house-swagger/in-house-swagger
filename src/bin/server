@@ -23,29 +23,59 @@ readonly PATH_LOG="${DIR_LOG}/$(basename $0 .sh).log"
 # 関数定義
 #---------------------------------------------------------------------------------------------------
 function start() {
+  # sync generator jar
+  log.info_teelog "sync generator jar..."
+  log.add_indent
+
+  log.info_teelog "remove symbolic link"
+  log.add_indent
+  ls -l ${DIR_GENERATOR}/WEB-INF/lib                                                               | # lib直下のファイル一覧から
+  grep '^l'                                                                                        | # シンボリックリンクに絞る
+  sed -e 's| -> .*$||'                                                                             | # リンク先の表記を除去
+  sed -e 's|^.* ||'                                                                                | # ファイル名以外を除去
+  xargs -I{} bash -c "rm -f ${DIR_GENERATOR}/WEB-INF/lib/{}"                                         # 削除
+  log.remove_indent
+
+  log.info_teelog "add symbolic link"
+  log.add_indent
+  local _path_tmp_list="/tmp/generator_jar_$$.lst"
+  find ${DIR_BASE}/config/generators -mindepth 2 -maxdepth 2 -type f -name "*.jar"                   > ${_path_tmp_list}
+  for _cur_file_path in $(cat ${_path_tmp_list}); do
+    local _cur_file_name=$(basename ${_cur_file_path})
+    ln -s "${_cur_file_path}" ${DIR_GENERATOR}/WEB-INF/lib/${_cur_file_name}
+    log.info_teelog "${_cur_file_path}"
+  done
+  rm -f ${_path_tmp_list}
+  log.remove_indent 2
+
+
+  # spec-mgr
+  log.info_teelog "swagger-spec-mgr start..."
+  ${DIR_SPEC_MGR}/bin/server start >> ${PATH_LOG} 2>&1
+  _retcode=$?
+
+  if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
+    log.info_teelog "swagger-spec-mgr started. (port=${SPECMGR_PORT})"
+  else
+    log.error_teelog "swagger-spec-mgr start failed."
+    return ${_retcode}
+  fi
+
+
   # Jetty
   export JETTY_ARGS
   log.info_teelog "in-house-swagger-server start..."
   ${DIR_JETTY}/bin/jetty.sh -d start >> ${PATH_LOG} 2>&1
-  local _retcode=$?
+  _retcode=$?
 
   if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
     log.info_teelog "in-house-swagger-server started. (port=${SERVER_PORT})"
     ${DIR_JETTY}/bin/jetty.sh check | log.info_teelog
   else
     log.error_teelog "in-house-swagger-server start failed."
+    return ${_retcode}
   fi
 
-  # spec-mgr
-  log.info_teelog "swagger-spec-mgr start..."
-  ${DIR_SPEC_MGR}/bin/server start >> ${PATH_LOG} 2>&1
-  local _retcode=$?
-
-  if [[ ${_retcode} -eq ${EXITCODE_SUCCESS} ]]; then
-    log.info_teelog "swagger-spec-mgr started. "
-  else
-    log.error_teelog "swagger-spec-mgr start failed."
-  fi
   return ${_retcode}
 }
 
