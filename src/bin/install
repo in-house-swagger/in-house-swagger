@@ -96,7 +96,6 @@ function local.download() {
 
   # ダウンロード
   curl                                                                                               \
-    --silent                                                                                         \
     --max-time ${DL_TIMEOUT}                                                                         \
     --location                                                                                       \
     --output "${_path_output}"                                                                       \
@@ -158,6 +157,8 @@ function local.extract() {
     return ${EXITCODE_ERROR}
   fi
 
+  local _exitcode=${EXITCODE_SUCCESS}
+
   # 展開ディレクトリ
   local _dir_to="$2"
   if [[ -d "${_dir_to}" ]]; then
@@ -173,8 +174,8 @@ function local.extract() {
   local _tmp_path="${_dir_to}/$(basename ${_path_from})"
   cd "${_dir_to}"
   mv "${_path_from}" "${_dir_to}/"
-  if [[ "zip" = "${_ext_from}" ]]; then
-    # zip
+  if [[ "zip" = "${_ext_from}" ]] || [[ "war" = "${_ext_from}" ]]; then
+    # zip | war
     log.info_console "unzip \"${_tmp_path}\""
     unzip "${_tmp_path}" 2>&1 | log.info_console
 
@@ -185,6 +186,7 @@ function local.extract() {
 
   else
     log.error_console "展開に対応していない拡張子です。target:${_ext_from}"
+    _exitcode=${EXITCODE_ERROR}
   fi
   mv "${_tmp_path}" "${_path_from}"
   cd - > /dev/null
@@ -193,9 +195,6 @@ function local.extract() {
   local _dirname_extracted="$(ls ${_dir_to} | head -n 1)"
   mv "${_dir_to}/${_dirname_extracted}"/* "${_dir_to}/"
   rm -fr "${_dir_to}/${_dirname_extracted}"
-
-  local _exitcode=${EXITCODE_SUCCESS}
-  local _retcode=${EXITCODE_SUCCESS}
 
   log.restore_indent
   return ${_exitcode}
@@ -278,6 +277,10 @@ retcode=${PIPESTATUS[0]}
 exit_on_fail ${retcode}
 log.remove_indent
 
+# etc/jetty.conf
+log.info_console "console-capture"
+echo "console-capture.xml" >> ${DIR_JETTY}/etc/jetty.conf
+
 # context.xml
 log.info_console "context"
 log.add_indent
@@ -286,8 +289,6 @@ cp "${DIR_CONFIG}/install/contexts"/* "${DIR_JETTY}/webapps/"
 retcode=$?
 exit_on_fail ${retcode}
 log.remove_indent
-
-# TODO ログ出力設定も、ここで定義
 
 log.remove_indent
 
@@ -323,49 +324,6 @@ local.install "swagger-spec-mgr" "${DOWNLOAD_URL_SPEC_MGR}" "${DIR_SPEC_MGR}"
 retcode=$?
 exit_on_fail ${retcode}
 
-# デフォルトユーザ追加
-log.save_indent
-log.info_console "デフォルトユーザの追加"
-log.add_indent
-
-# サーバ起動
-log.info_console "${DIR_SPEC_MGR}/bin/server start"
-${DIR_SPEC_MGR}/bin/server start
-retcode=$?
-exit_on_fail ${retcode}
-
-# portを取得
-PORT_SPEC_MGR=$(                                                                                   \
-  cat ${DIR_SPEC_MGR}/config/swagger-spec-mgr.properties                                           |
-  grep "SERVER_PORT"                                                                               |
-  cut -d '=' -f 2                                                                                  \
-)
-# contextpathを取得
-CONTEXTPATH_SPEC_MGR=$(                                                                            \
-  cat ${DIR_SPEC_MGR}/config/application.yml                                                       |
-  grep "contextPath"                                                                               |
-  cut -d ':' -f 2                                                                                  |
-  _trim                                                                                            |
-  sed -e 's|"||g'                                                                                  \
-)
-
-# ユーザ追加
-curl                                                                                               \
-  --silent                                                                                         \
-  --max-time ${DL_TIMEOUT}                                                                         \
-  --location                                                                                       \
-  --request POST                                                                                   \
-  --url "localhost:${PORT_SPEC_MGR}${CONTEXTPATH_SPEC_MGR}/users"                                  |
-log.debug_console
-_retcode=${PIPESTATUS[0]}
-
-# サーバ停止
-log.info_console "${DIR_SPEC_MGR}/bin/server stop"
-${DIR_SPEC_MGR}/bin/server stop
-retcode=$?
-exit_on_fail ${retcode}
-
-
 # 暗号化キーの生成
 log.save_indent
 log.info_console "暗号化キーの生成"
@@ -383,25 +341,9 @@ log.restore_indent
 #-------------------------------------------------------------------------------
 # generator
 #-------------------------------------------------------------------------------
-log.save_indent
-log.info_console "swagger-generator"
-log.add_indent
-
-# ダウンロード
-local.gracefull_download "${DOWNLOAD_URL_GENERATOR}"
-exit_on_fail ${retcode}
-
-# インストール
-log.info_console "インストール"
-log.add_indent
-
-log.info_console "ln -fs \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})\" \"${PATH_GENERATOR}\""
-ln -fs "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_GENERATOR})" "${PATH_GENERATOR}"
+local.install "swagger-generator" "${DOWNLOAD_URL_GENERATOR}" "${DIR_GENERATOR}"
 retcode=$?
 exit_on_fail ${retcode}
-
-log.remove_indent
-log.restore_indent
 
 
 #-------------------------------------------------------------------------------
