@@ -62,8 +62,6 @@ readonly DIR_DATA="${DIR_BASE}/data"
 
 # swagger-codegen-cli
 readonly PATH_CODEGEN_CLI="${DIR_LIB}/swagger-codegen-cli.jar"
-# swagger-generator
-readonly PATH_GENERATOR="${DIR_LIB}/swagger-generator.war"
 # groovy
 readonly DIR_GROOVY="${DIR_LIB}/groovy"
 
@@ -75,6 +73,8 @@ readonly DIR_EDITOR="${DIR_MODULE}/swagger-editor"
 readonly DIR_UI="${DIR_MODULE}/swagger-ui"
 # swagger-generator
 readonly DIR_GENERATOR="${DIR_MODULE}/swagger-generator"
+# swagger-validator
+readonly DIR_VALIDATOR="${DIR_MODULE}/swagger-validator"
 # swagger-spec-mgr
 readonly DIR_SPEC_MGR="${DIR_MODULE}/swagger-spec-mgr"
 
