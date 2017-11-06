@@ -15,7 +15,7 @@ readonly DIR_BASE="$(cd ..; pwd)"
 . "./setenv"
 
 # loggingユーティリティ
-readonly PATH_LOG="${DIR_LOG}/$(basename \"$0\" .sh).log"
+readonly PATH_LOG=/dev/null
 . "${DIR_BIN_LIB}/logging_utils.sh"
 
 
@@ -132,13 +132,15 @@ while :; do
       shift 2
       break
       ;;
+    -h|--help)
+      usage
+      ;;
     --)
       shift
       break
       ;;
     -*)
       usage
-      exit ${EXITCODE_ERROR}
       ;;
     *)
       break
