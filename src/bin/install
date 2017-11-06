@@ -355,6 +355,31 @@ exit_on_fail ${retcode}
 
 
 #-------------------------------------------------------------------------------
+# swgger2markup
+#-------------------------------------------------------------------------------
+log.save_indent
+log.info_console "swagger2markup"
+log.add_indent
+
+# ダウンロード
+local.gracefull_download "${DOWNLOAD_URL_MARKUP}"
+retcode=$?
+exit_on_fail ${retcode}
+
+# インストール
+log.info_console "インストール"
+log.add_indent
+
+log.info_console "ln -fs \"${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_MARKUP})\" \"${PATH_MARKUP}\""
+ln -fs "${DIR_ARCHIVE}/$(basename ${DOWNLOAD_URL_MARKUP})" "${PATH_MARKUP}"
+retcode=$?
+exit_on_fail ${retcode}
+
+log.remove_indent
+log.restore_indent
+
+
+#-------------------------------------------------------------------------------
 # codegen-cli
 #-------------------------------------------------------------------------------
 log.save_indent

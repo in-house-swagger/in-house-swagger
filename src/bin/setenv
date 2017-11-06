@@ -62,6 +62,8 @@ readonly DIR_DATA="${DIR_BASE}/data"
 
 # swagger-codegen-cli
 readonly PATH_CODEGEN_CLI="${DIR_LIB}/swagger-codegen-cli.jar"
+# swagger2markup
+readonly PATH_MARKUP="${DIR_LIB}/swagger2markup.jar"
 # groovy
 readonly DIR_GROOVY="${DIR_LIB}/groovy"
 
