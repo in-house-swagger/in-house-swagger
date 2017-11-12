@@ -23,24 +23,38 @@ readonly PATH_LOG="${DIR_LOG}/$(basename \"$0\" .sh).log"
 #---------------------------------------------------------------------------------------------------
 # 前提チェック
 #---------------------------------------------------------------------------------------------------
-# java
 if [[ "$(which java)x" = "x" ]]; then
   log.error_console "java がインストールされていません。"
   exit ${EXITCODE_ERROR}
 fi
 
-# curl
 if [[ "$(which curl)x" = "x" ]]; then
   log.error_console "curl がインストールされていません。"
   exit ${EXITCODE_ERROR}
 fi
+
+if [[ "$(which md5sum)x" = "x" ]]; then
+  log.error_console "md5sum がインストールされていません。"
+  exit ${EXITCODE_ERROR}
+fi
+
+if [[ "$(which sha1sum)x" = "x" ]]; then
+  log.error_console "sha1sum がインストールされていません。"
+  exit ${EXITCODE_ERROR}
+fi
+
+if [[ "$(which gpg)x" = "x" ]]; then
+  log.error_console "gpg がインストールされていません。"
+  exit ${EXITCODE_ERROR}
+fi
+
 
 
 #---------------------------------------------------------------------------------------------------
 # 関数定義
 #---------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-# ダウンロード
+# エラー終了判定
 #-------------------------------------------------------------------------------
 function exit_on_fail() {
   local _USAGE="Usage: ${FUNCNAME[0]} RETURN_CODE"
@@ -48,7 +62,7 @@ function exit_on_fail() {
 
   if [[ $# -ne 1 ]]; then
     log.error_console "${_USAGE}"
-    _retcode=${EXITCODE_ERROR}
+    exit ${EXITCODE_ERROR}
   fi
 
   if [[ ${_retcode} -ne ${EXITCODE_SUCCESS} ]]; then
@@ -65,14 +79,32 @@ function exit_on_fail() {
 # ダウンロード
 #-------------------------------------------------------------------------------
 function local.download() {
-  local _USAGE="Usage: ${FUNCNAME[0]} URL"
+  local _USAGE="Usage: ${FUNCNAME[0]} OPTIONS URL"
 
   log.save_indent
   log.info_console "${FUNCNAME[0]} $*"
   log.add_indent
 
+  # オプション解析
+  local _continue_option=""
+  while :; do
+    case $1 in
+      -c|--continue)
+        _continue_option="--continue-at -"
+        shift
+        ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+
   # 引数チェック
-  if [[ $# -ne 1 ]]; then
+  if [[ $# -gt 1 ]]; then
     log.error_console "${_USAGE}"
     log.restore_indent
     return ${EXITCODE_ERROR}
@@ -100,6 +132,7 @@ function local.download() {
     --location                                                                                       \
     --output "${_path_output}"                                                                       \
     --request GET                                                                                    \
+    ${_continue_option}                                                                              \
     --url "${_url}"                                                                                |
   log.debug_console
   _retcode=${PIPESTATUS[0]}
@@ -114,22 +147,116 @@ function local.download() {
   log.restore_indent
   return ${_exitcode}
 }
+
 function local.gracefull_download() {
+  # ダウンロードURL
   local _download_url="$1"
+  # チェックサムタイプ ※デフォルト:md5
+  local _sum_type="${2:-md5}"
+  # ダウンロードファイルパス
   local _path_downloaded="${DIR_ARCHIVE}/$(basename ${_download_url})"
+
+  local _retcode="${EXITCODE_SUCCESS}"
 
   log.info_console "ダウンロード"
   log.add_indent
+
+  local _option=""
   if [[ -f "${_path_downloaded}" ]]; then
-    log.info_console "スキップしました。"
-  else
-    local.download "${_download_url}"
+    local.checksum "${_download_url}" "${_sum_type}"
     _retcode=$?
-    if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-      return ${retcode}
+    if [[ ${EXITCODE_SUCCESS} -eq ${_retcode} ]]; then
+      log.info_console "ダウンロードをスキップしました。"
+      log.remove_indent
+      return ${_retcode}
+    else
+      _option="--continue"
     fi
   fi
+
+  local.download ${_option} "${_download_url}"
+  _retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+    log.remove_indent
+    return ${_retcode}
+  fi
+
+  # ダウンロード済みファイルの検証
+  local.checksum "${_download_url}" "${_sum_type}"
+  _retcode=$?
+  if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+    log.error_console "ダウンロード結果の検証に失敗しました。"
+    log.remove_indent
+    return ${_retcode}
+  fi
   log.remove_indent
+}
+
+function local.checksum() {
+  local _download_url="$1"
+  local _sum_type=$(echo $2 | cut -d ':' -f 1)
+  local _path_downloaded="${DIR_ARCHIVE}/$(basename ${_download_url})"
+
+  log.info_console "ダウンロード済みファイルの検証"
+  log.add_indent
+
+  local _retcode=${EXITCODE_SUCCESS}
+  local _ext=""
+  case "${_sum_type}" in
+    md5|sha1)
+      _ext="${_sum_type}"
+      ;;
+    bintray)
+      _ext="asc"
+      # download public key and merge
+      if [ ! -f ${_path_downloaded}.pubkey ]; then
+        local _sum_user=$(echo $2 | cut -d ':' -f 2)
+        local _bintray_publickey="https://bintray.com/user/downloadSubjectPublicKey?username=${_sum_user}"
+        # import/merge publickey
+        curl ${_bintray_publickey} -o ${_path_downloaded}.pubkey
+        gpg --import ${_path_downloaded}.pubkey
+      fi
+      ;;
+    *)
+      log.info_console "検証をスキップしました。"
+      log.remove_indent
+      return ${EXITCODE_SUCCESS}
+      ;;
+  esac
+
+  log.debug_console "検証用サマリのダウンロード"
+  log.add_indent
+  if [[ -f "${_path_downloaded}.${_ext}" ]]; then
+    log.debug_console "ダウンロード済み"
+    _retcode=${EXITCODE_SUCCESS}
+  else
+    local.download "${_download_url}.${_ext}"
+    _retcode=$?
+  fi
+  log.remove_indent
+  if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+    return ${_retcode}
+  fi
+
+  # 検証
+  local _command=""
+  case "${_sum_type}" in
+    md5|sha1)
+      # 確認用にハッシュリストを作成
+      local _val=$(cat ${_path_downloaded}.${_ext} | sed 's/^\([^ \t]*\)[ \t].*/\1/')
+      echo "${_val} ${_path_downloaded}" > /tmp/sum.$$
+      _command="${_sum_type}sum -c /tmp/sum.$$"
+      ;;
+    *)
+      _command="gpg --batch --verify ${_path_downloaded}.${_ext} ${_path_downloaded}"
+      ;;
+  esac
+  log.debug_console "${_command}"
+  ${_command} | log.info_console
+  _retcode=${PIPESTATUS[0]}
+
+  log.remove_indent
+  return ${_retcode}
 }
 
 #-------------------------------------------------------------------------------
@@ -177,12 +304,12 @@ function local.extract() {
   if [[ "zip" = "${_ext_from}" ]] || [[ "war" = "${_ext_from}" ]]; then
     # zip | war
     log.info_console "unzip \"${_tmp_path}\""
-    unzip "${_tmp_path}" 2>&1 | log.info_console
+    unzip "${_tmp_path}" 2>&1 | log.debug_console
 
   elif [[ "tar.gz" = "${_ext_from}" || "tgz" = "${_ext_from}" ]]; then
     # tar.gz
-    log.info_console "tar xvzf \"${_tmp_path}\""
-    tar xvzf "${_tmp_path}" 2>&1 | log.info_console
+    log.info_console "tar xzf \"${_tmp_path}\""
+    tar xvzf "${_tmp_path}" 2>&1 | log.debug_console
 
   else
     log.error_console "展開に対応していない拡張子です。target:${_ext_from}"
@@ -210,6 +337,7 @@ function local.install() {
   local _download_url="$2"
   local _path_downloaded="${DIR_ARCHIVE}/$(basename ${_download_url})"
   local _path_extracted="$3"
+  local _sum_type="$4"
 
   local _retcode=${EXITCODE_SUCCESS}
 
@@ -217,10 +345,10 @@ function local.install() {
   log.add_indent
 
   # ダウンロード
-  local.gracefull_download "${_download_url}"
+  local.gracefull_download "${_download_url}" "${_sum_type}"
   _retcode=$?
-  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-    return ${retcode}
+  if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+    return ${_retcode}
   fi
 
   # インストール
@@ -228,13 +356,13 @@ function local.install() {
   log.add_indent
   local.extract "${_path_downloaded}" "${_path_extracted}"
   _retcode=$?
-  if [[ ${EXITCODE_SUCCESS} -ne ${retcode} ]]; then
-    return ${retcode}
+  if [[ ${EXITCODE_SUCCESS} -ne ${_retcode} ]]; then
+    return ${_retcode}
   fi
   log.remove_indent
 
   log.restore_indent
-  return ${_exitcode}
+  return ${_retcode}
 }
 
 
@@ -259,7 +387,7 @@ log.add_indent
 #-------------------------------------------------------------------------------
 # jetty
 #-------------------------------------------------------------------------------
-local.install "jetty" "${DOWNLOAD_URL_JETTY}" "${DIR_JETTY}"
+local.install "jetty" "${DOWNLOAD_URL_JETTY}" "${DIR_JETTY}" "${CHECKSUM_JETTY}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -296,7 +424,7 @@ log.remove_indent
 #-------------------------------------------------------------------------------
 # groovy
 #-------------------------------------------------------------------------------
-local.install "groovy" "${DOWNLOAD_URL_GROOVY}" "${DIR_GROOVY}"
+local.install "groovy" "${DOWNLOAD_URL_GROOVY}" "${DIR_GROOVY}" "${CHECKSUM_GROOVY}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -304,7 +432,7 @@ exit_on_fail ${retcode}
 #-------------------------------------------------------------------------------
 # editor
 #-------------------------------------------------------------------------------
-local.install "swagger-editor" "${DOWNLOAD_URL_EDITOR}" "${DIR_EDITOR}"
+local.install "swagger-editor" "${DOWNLOAD_URL_EDITOR}" "${DIR_EDITOR}" "${CHECKSUM_EDITOR}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -312,7 +440,7 @@ exit_on_fail ${retcode}
 #-------------------------------------------------------------------------------
 # ui
 #-------------------------------------------------------------------------------
-local.install "swagger-ui" "${DOWNLOAD_URL_UI}" "${DIR_UI}"
+local.install "swagger-ui" "${DOWNLOAD_URL_UI}" "${DIR_UI}" "${CHECKSUM_UI}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -320,7 +448,7 @@ exit_on_fail ${retcode}
 #-------------------------------------------------------------------------------
 # spec-mgr
 #-------------------------------------------------------------------------------
-local.install "swagger-spec-mgr" "${DOWNLOAD_URL_SPEC_MGR}" "${DIR_SPEC_MGR}"
+local.install "swagger-spec-mgr" "${DOWNLOAD_URL_SPEC_MGR}" "${DIR_SPEC_MGR}" "${CHECKSUM_SPEC_MGR}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -341,7 +469,7 @@ log.restore_indent
 #-------------------------------------------------------------------------------
 # generator
 #-------------------------------------------------------------------------------
-local.install "swagger-generator" "${DOWNLOAD_URL_GENERATOR}" "${DIR_GENERATOR}"
+local.install "swagger-generator" "${DOWNLOAD_URL_GENERATOR}" "${DIR_GENERATOR}" "${CHECKSUM_GENERATOR}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -349,7 +477,7 @@ exit_on_fail ${retcode}
 #-------------------------------------------------------------------------------
 # validator
 #-------------------------------------------------------------------------------
-local.install "swagger-validator" "${DOWNLOAD_URL_VALIDATOR}" "${DIR_VALIDATOR}"
+local.install "swagger-validator" "${DOWNLOAD_URL_VALIDATOR}" "${DIR_VALIDATOR}" "${CHECKSUM_VALIDATOR}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -362,7 +490,7 @@ log.info_console "swagger2markup"
 log.add_indent
 
 # ダウンロード
-local.gracefull_download "${DOWNLOAD_URL_MARKUP}"
+local.gracefull_download "${DOWNLOAD_URL_MARKUP}" "${CHECKSUM_MARKUP}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -387,7 +515,7 @@ log.info_console "swagger-codegen-cli"
 log.add_indent
 
 # ダウンロード
-local.gracefull_download "${DOWNLOAD_URL_CODEGEN_CLI}"
+local.gracefull_download "${DOWNLOAD_URL_CODEGEN_CLI}" "${CHECKSUM_CODEGEN_CLI}"
 retcode=$?
 exit_on_fail ${retcode}
 
@@ -416,8 +544,8 @@ mkdir -p "${dir_template_default}"
 
 # 展開
 log.info_console "unzip ${PATH_CODEGEN_CLI} -d \"${dir_template_work}\""
-unzip ${PATH_CODEGEN_CLI} -d "${dir_template_work}"
-retcode=$?
+unzip ${PATH_CODEGEN_CLI} -d "${dir_template_work}" 2>&1 | log.debug_console
+retcode=${PIPESTATUS[0]}
 exit_on_fail ${retcode}
 
 # templateディレクトリを移動
@@ -429,8 +557,7 @@ xargs -I{} bash -c "mv {} ${dir_template_default}/"                             
 # 展開ディレクトリを削除
 rm -fr "${dir_template_work}"
 
-log.info_console "デフォルトテンプレート"
-log.info_console "配置ディレクトリ: ${dir_template_default}"
+log.info_console "デフォルトテンプレート: ${dir_template_default}"
 ls "${dir_template_default}"
 
 log.remove_indent

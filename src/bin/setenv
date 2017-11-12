@@ -22,8 +22,8 @@ readonly EXITCODE_ERROR=6
 #-------------------------------------------------------------------------------
 readonly LOGLEVEL_TRACE="TRACE"
 readonly LOGLEVEL_DEBUG="DEBUG"
-readonly LOGLEVEL_INFO="INFO "
-readonly LOGLEVEL_WARN="WARN "
+readonly LOGLEVEL_INFO=" INFO"
+readonly LOGLEVEL_WARN=" WARN"
 readonly LOGLEVEL_ERROR="ERROR"
 
 
