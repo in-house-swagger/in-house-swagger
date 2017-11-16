@@ -23,6 +23,9 @@ readonly PATH_LOG="${DIR_LOG}/$(basename $0 .sh).log"
 # 関数定義
 #---------------------------------------------------------------------------------------------------
 function start() {
+  cat "${DIR_BASE}/banner.txt"
+  cat "${DIR_BASE}/VERSION"
+
   # sync generator jar
   log.info_teelog "sync generator jar..."
   log.add_indent

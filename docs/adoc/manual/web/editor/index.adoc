@@ -1,0 +1,18 @@
+==== Swagger Editor
+
+http://localhost:9700/editor
+
+WARNING: TODO ブラウザとsourcetreeを並べて、GitFlowの操作を録画、gifで埋め込み
+
+
+include::spec.adoc[]
+
+include::edit.adoc[]
+
+include::branch.adoc[]
+
+include::tag.adoc[]
+
+include::user.adoc[]
+
+include::generate.adoc[]

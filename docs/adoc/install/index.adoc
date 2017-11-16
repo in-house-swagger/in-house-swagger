@@ -1,0 +1,43 @@
+== Installation
+
+- ダウンロード
+
+[source, bash]
+----
+curl \
+  --request GET \
+  --url https://github.com/in-house-swagger/in-house-swagger/releases/download/${version}/in-house-swagger-${version}.tar.gz
+  --output in-house-swagger-${version}.tar.gz
+----
+
+- インストール
+
+[source, bash]
+----
+#-------------------------------------------------
+# インストール
+#-------------------------------------------------
+tar xf in-house-swagger-${version}.tar.gz
+cd in-house-swagger-${version}/
+bin/install
+
+#-------------------------------------------------
+# gitリモートリポジトリを利用する場合
+#-------------------------------------------------
+# リモートリポジトリURLを設定
+{
+  echo "export GIT_REMOTE_REPOSITORY_URL=${YOUR_REPO_URL}"
+} >> modules/swagger-spec-mgr/config/swagger-spec-mgr.properties
+
+# 接続情報の暗号化
+{
+  echo "GIT_ACCESS_USER=${YOUR_REPO_USER}"
+  echo "GIT_ACCESS_PASSWORD=${YOUR_REPO_PASSWORD}"
+} > modules/swagger-spec-mgr/config/access_info
+modules/swagger-spec-mgr/bin/mainte/encrypt_access_info.sh
+
+#-------------------------------------------------
+# デフォルトのgitコミットユーザを登録
+#-------------------------------------------------
+modules/swagger-spec-mgr/bin/git/clone.sh
+----

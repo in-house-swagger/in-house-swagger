@@ -1,0 +1,13 @@
+=== spec-mgr
+
+* デフォルトのコミット設定を変更する
+
+WARNING: TODO
+
+* Specの管理ディレクトリを変更する
+
+WARNING: TODO
+
+* Specの分割設定を変更する
+
+WARNING: TODO

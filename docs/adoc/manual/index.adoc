@@ -1,0 +1,9 @@
+== Manual
+
+include::web/index.adoc[]
+
+include::cli/index.adoc[]
+
+include::generate_spec/index.adoc[]
+
+include::customize/index.adoc[]

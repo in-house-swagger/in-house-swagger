@@ -1,0 +1,6 @@
+=== in-house-swagger
+
+* 起動ポートを変更する
+※デフォルトは、swagger-tools:9700 + spec-mgr:9701
+
+WARNING: TODO

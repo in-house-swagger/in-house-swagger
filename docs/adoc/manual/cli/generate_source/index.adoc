@@ -1,0 +1,56 @@
+==== bin/generate
+
+codegen-cli の呼び出しに、カスタムtemplate, カスタムlanguageの考慮を加えた軽量なラッパーです。
+codegen-cli自体の利用方法は https://github.com/swagger-api/swagger-codegen[codegen-cliのマニュアル] で確認してください。
+
+
+===== デフォルトlanguageでリソースを生成する
+
+[source, bash]
+----
+bin/generate \
+  generate \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -l typescript-angular \
+  -o output/typescript-angular
+# 結果確認
+ls -l output/typescript-angular
+----
+
+===== デフォルトlanguage + カスタムtemplate でリソースを生成する
+
+[source, bash]
+----
+bin/generate \
+  generate \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -l typescript-angular2 \
+  -t config/templates/_default/typescript-angular2 \
+  -o output/typescript-angular2
+# 結果確認
+ls -l output/typescript-angular2
+----
+
+===== カスタムlanguage(jar) でリソースを生成する
+
+[source, bash]
+----
+bin/generate \
+  -cl CustomLanguageName \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -o output/CustomLanguageName
+# 結果確認
+ls -l output/CustomLanguageName
+----
+
+===== カスタムlanguage(groovy) でリソースを生成する
+
+[source, bash]
+----
+bin/generate \
+  -cl CustomLanguageNameGroovy \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -o output/CustomLanguageNameGroovy
+# 結果確認
+ls -l output/CustomLanguageNameGroovy
+----

@@ -1,0 +1,9 @@
+===== Generate
+
+====== Serverリソースの生成
+
+WARNING: TODO
+
+====== Clientリソースの生成
+
+WARNING: TODO

@@ -1,0 +1,3 @@
+=== Generate Specification
+
+WARNING: TODO springfoxなど、swagger-coreの実装にお任せ

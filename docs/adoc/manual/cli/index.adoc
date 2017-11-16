@@ -1,0 +1,5 @@
+=== CLI
+
+include::generate_source/index.adoc[]
+
+include::git/index.adoc[]

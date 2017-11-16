@@ -1,0 +1,29 @@
+== Overview
+
+image::../images/overview.png[]
+
+WARNING: TODO revealのスライドを埋め込む
+
+=== Feature
+. swagger tools(editor, generator, ui, validator, codegen-cli), swagger2markup, spec-mgr を一括インストール
+. codegenのカスタマイズ内容をconfigディレクトリで管理
+. Open API Specification (OAS) を、editorからgit管理
+. Open API Specification (OAS) は、json-refsで分割
+
+=== Workflow
+
+image::../images/workflow.png[]
+
+=== Architecture
+
+image::../images/architecture.png[]
+
+WARNING: TODO 画像を作成
+
+
+=== Licenses
+
+[format="csv", options="header"]
+|===
+include::license.csv[]
+|===

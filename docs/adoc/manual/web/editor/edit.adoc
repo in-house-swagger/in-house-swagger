@@ -1,0 +1,9 @@
+===== 編集
+
+====== 編集中の定義をクリアする
+
+. Edit > Clear Editor をクリック
+
+====== 編集中の定義をjsonからyamlに変換する
+
+. Edit > Convert Json to Yaml をクリック

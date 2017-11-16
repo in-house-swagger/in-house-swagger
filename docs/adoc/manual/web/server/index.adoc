@@ -1,0 +1,22 @@
+==== Server Control
+
+===== 起動
+
+[source, bash]
+----
+bin/server start
+----
+
+===== 停止
+
+[source, bash]
+----
+bin/server stop
+----
+
+===== 再起動
+
+[source, bash]
+----
+bin/server restart
+----
