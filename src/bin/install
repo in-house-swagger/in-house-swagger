@@ -473,6 +473,14 @@ local.install "swagger-generator" "${DOWNLOAD_URL_GENERATOR}" "${DIR_GENERATOR}"
 retcode=$?
 exit_on_fail ${retcode}
 
+# validator対応
+log.info_console "validator"
+log.add_indent
+log.info_console "cp \"${DIR_CONFIG}/install/generator\"/* \"${DIR_GENERATOR}/\""
+cp "${DIR_CONFIG}/install/generator"/* "${DIR_GENERATOR}/"
+retcode=$?
+exit_on_fail ${retcode}
+log.remove_indent
 
 #-------------------------------------------------------------------------------
 # validator
