@@ -1,6 +1,42 @@
-=== in-house-swagger
+=== config/
+
+==== project.properties
 
 * 起動ポートを変更する
-※デフォルトは、swagger-tools:9700 + spec-mgr:9701
 
-WARNING: TODO
+[source, properties]
+----
+# default: 9700
+# spec-mgr port = default + 1
+SERVER_PORT=9700
+----
+
+* jettyの起動パラメータを変更する
+
+[source, properties]
+----
+# jetty起動引数
+JETTY_ARGS="jetty.http.port=${SERVER_PORT}"
+----
+
+* 利用ツールのバージョンを変更する
+
+[source, properties]
+----
+# ダウンロードURL
+DOWNLOAD_URL_JETTY="http://central.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.6.v20170531/jetty-distribution-9.4.6.v20170531.tar.gz"
+DOWNLOAD_URL_GROOVY="https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.12.zip"
+DOWNLOAD_URL_CODEGEN_CLI="http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.2.3/swagger-codegen-cli-2.2.3.jar"
+ :
+----
+
+* 利用ツールのダウンロード検証ハッシュを変更する
+
+[source, properties]
+----
+# ダウンロード検証(md5/sha1/bintray:project名/なし)
+CHECKSUM_JETTY=md5
+CHECKSUM_GROOVY=bintray:groovy
+CHECKSUM_CODEGEN_CLI=md5
+ :
+----

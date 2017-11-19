@@ -1,11 +1,11 @@
-:Version: 0.4.0
-:author: suwa-sh
+// :Version: 0.0.0
+// :author: name
 :source-highlighter: coderay
 :sectnums:
 //:chapter-label:
 :toc: left
-:toclevels: 5
-//:toc-title: 目次
+:toclevels: 3
+// :toc-title: 目次
 // :preface-title: はじめに
 // :appendix-caption: 付録
 // :caution-caption: 注意
@@ -23,6 +23,7 @@
 // :version-label: バージョン
 // :warning-caption: 警告
 :icons: font
+:imagesdir: ../images
 
 = in-house-swagger {version}
 

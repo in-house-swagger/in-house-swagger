@@ -1,3 +1,12 @@
 ==== Custom Template
 
-WARNING: TODO 作成方法はリンク、保存場所を明記
+* Template実装
+
+[source, bash]
+----
+mkdir config/templates/yourCustomTemplateName
+cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomTemplateName/
+----
+
+* 参考リンク
+** https://qiita.com/Quramy/items/c583f3213f0b77ff1bac

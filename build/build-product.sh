@@ -28,19 +28,20 @@ dir_cur_dist="${DIR_DIST}/${archive_name_with_dpend}"
 # build
 #---------------------------------------------------------------------------------------------------
 echo "出力ディレクトリのクリア"
-if [[ -d ${DIR_DIST} ]]; then
+if [[ -d "${DIR_DIST}" ]]; then
   rm -fr "${DIR_DIST}"
 fi
 mkdir -p "${dir_cur_dist}"
 
 echo ""
 echo "ソースのコピー"
-cp -pr "${DIR_SRC}"/* ${dir_cur_dist}/
+cp -pr "${DIR_SRC}/"* "${dir_cur_dist}/"
 
 echo ""
 echo "不要ファイルの削除"
-find ${dir_cur_dist} -type f -name ".gitkeep"  | xargs -I{} bash -c 'rm -f {}'
-find ${dir_cur_dist} -type f -name ".DS_Store" | xargs -I{} bash -c 'rm -f {}'
+find "${dir_cur_dist}" -type f -name ".gitkeep"  | xargs -I{} bash -c 'echo "rm -f {}"; rm -f {}'
+find "${dir_cur_dist}" -type f -name ".DS_Store" | xargs -I{} bash -c 'echo "rm -f {}"; rm -f {}'
+
 
 #---------------------------------------------------------------------------------------------------
 # test
@@ -59,24 +60,24 @@ fi
 #---------------------------------------------------------------------------------------------------
 echo ""
 echo "配布アーカイブに不要なファイルの削除"
-rm -fr ${dir_cur_dist}/config/templates/_default
+rm -fr "${dir_cur_dist:?}/config/templates/_default"
 
 echo ""
 echo "依存を含めた配布アーカイブの作成"
-rm -fr ${dir_cur_dist}/lib/
-rm -fr ${dir_cur_dist}/module/
+rm -fr "${dir_cur_dist:?}/lib/"
+rm -fr "${dir_cur_dist:?}/module/"
 cd ${DIR_DIST}
-tar czf ./${archive_name_with_dpend}.tar.gz ./${archive_name_with_dpend}
+tar czf "./${archive_name_with_dpend}.tar.gz" "./${archive_name_with_dpend}"
 
 echo ""
 echo "依存を含めない配布アーカイブの作成"
-rm -fr ${dir_cur_dist}/archive/
-mv ./${archive_name_with_dpend} ./${archive_name}
-tar czf ./${archive_name}.tar.gz ./${archive_name}
+rm -fr "${dir_cur_dist:?}/archive/"
+mv "./${archive_name_with_dpend}" "./${archive_name}"
+tar czf "./${archive_name}.tar.gz" "./${archive_name}"
 
 echo ""
 echo "作業ディレクトリの削除"
-rm -fr ./${archive_name}/
+rm -fr "./${archive_name:?}/"
 
 echo ""
 echo "ビルドが完了しました。"

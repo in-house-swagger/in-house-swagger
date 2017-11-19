@@ -1,9 +1,6 @@
 ==== Swagger Editor
 
-http://localhost:9700/editor
-
-WARNING: TODO ブラウザとsourcetreeを並べて、GitFlowの操作を録画、gifで埋め込み
-
+TIP: デフォルト設定の場合、 http://localhost:9700/editor でアクセスできます。
 
 include::spec.adoc[]
 

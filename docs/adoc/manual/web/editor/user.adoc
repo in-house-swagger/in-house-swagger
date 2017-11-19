@@ -1,28 +1,30 @@
 ===== Git Commit Userの管理
 
-WARNING: TODO リモートリポジトリの有無で、扱いが変わることを明記
+image::editor/menu_user.png[]
+
+WARNING: Gitリモートリポジトリを利用しない場合、ユーザごとに異なるローカルリポジトリが作成されます。
 
 ====== コミットユーザの追加
 
-. User > Add Commit User をクリック
-. Commit User Name を入力
-. Commit User Email を入力
+. User > Add User をクリック
+. id を入力
+. email を入力
 . Create ボタンをクリック
 
 ====== コミットユーザの削除
 
-. User > Delete Commit User をクリック
-. Target Commit User を選択
+. User > Delete User をクリック
+. User を選択
 . Delete ボタンをクリック
 
 ====== コミットユーザの切り替え
 
-. User > Switch Commit User をクリック
-. Target Commit User を選択
-. Switch ボタンをクリック
+. User > Switch User をクリック
+. User を選択
+. Change ボタンをクリック
 
 ====== コミットメッセージの変更
 
-. User > Change Commit Message をクリック
-. Commit Message を入力
+. User > Commit Msg をクリック
+. message を入力
 . Save ボタンをクリック

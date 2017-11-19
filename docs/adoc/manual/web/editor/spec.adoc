@@ -1,8 +1,16 @@
 ===== Specの管理
 
+image::editor/menu_file.png[]
+
+====== 開く
+
+. File > Open をクリック
+. SpecID を選択
+. Open ボタンをクリック
+
 ====== 新規保存
 
-. File > Save as をクリック
+. File > Save as... をクリック
 . SpecID を入力
 . Create ボタンをクリック
 
@@ -16,12 +24,6 @@
 . SpecID を選択
 . Delete ボタンをクリック
 
-====== 開く
-
-. File > Open をクリック
-. SpecID を選択
-. Open ボタンをクリック
-
 ====== URLを編集画面にimport
 
 . File > Import URL をクリック
@@ -33,3 +35,11 @@
 . File > Import File をクリック
 . ファイルを選択
 . Import ボタンをクリック
+
+====== 編集内容をyamlフォーマットでダウンロード
+
+. File > Download YAML をクリック
+
+====== 編集内容をjsonフォーマットでダウンロード
+
+. File > Download JSON をクリック

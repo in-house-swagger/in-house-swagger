@@ -1,9 +1,11 @@
 ===== 編集
 
-====== 編集中の定義をクリアする
-
-. Edit > Clear Editor をクリック
+image::editor/menu_edit.png[]
 
 ====== 編集中の定義をjsonからyamlに変換する
 
-. Edit > Convert Json to Yaml をクリック
+. Edit > Convert to YAML をクリック
+
+====== 編集中の定義をクリアする
+
+. Edit > Clear editor をクリック

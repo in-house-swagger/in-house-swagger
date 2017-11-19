@@ -1,3 +1,243 @@
-==== modules/swagger-spec-mgr/bin/git/
+==== module/swagger-spec-mgr/bin/git/
 
-WARNING: TODO
+===== User追加 (clone/init)
+
+[source, bash]
+----
+# リポジトリ初期化処理
+#   GIT_REMOTE_REPOSITORY_URL が定義されている場合、git clone
+#   定義されていない場合、git init を実行します。
+#
+# 引数
+#   1: コミットユーザ      ※任意
+#   2: コミットユーザemail ※任意
+#
+# オプション
+#   -f | --force: 強制初期化モード
+#     Git作業ディレクトリが既に存在する場合、削除してから初期化します。
+#
+module/swagger-spec-mgr/bin/git/clone.sh
+----
+
+===== remoteリポジトリ設定
+
+[source, bash]
+----
+# remote origin設定処理
+#
+# 引数
+#   1: リモートリポジトリURL
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/add_origin.sh REMOTE_URL
+----
+
+
+===== コミット操作
+
+====== commit/pull
+
+[source, bash]
+----
+# リポジトリ更新取得処理
+#   リモートリポジトリ が設定されている場合、カレントブランチで、git pull
+#   定義されていない場合、スキップします。
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/pull.sh
+----
+
+====== push
+
+[source, bash]
+----
+# リポジトリ更新反映処理
+#   リモートリポジトリ が設定されている場合、git commit & push
+#   定義されていない場合、git commit だけを実行します。
+#
+# 引数
+#   1: コミットコメント
+#   2: コミットユーザ   ※任意
+#
+module/swagger-spec-mgr/bin/git/push.sh MESSAGE
+----
+
+
+===== ブランチ操作
+
+====== ブランチ一覧
+
+[source, bash]
+----
+# ブランチ一覧取得処理
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_list.sh 2>/dev/null
+----
+
+====== ブランチ存在確認
+
+[source, bash]
+----
+# ブランチ存在確認処理
+#
+# 引数
+#   1: 対象ブランチ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_is_exist.sh BRANCH 2>/dev/null
+----
+
+====== カレントブランチ確認
+
+[source, bash]
+----
+# 現在ブランチ存在確認処理
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_get_current.sh 2>/dev/null
+----
+
+====== ブランチ切り替え
+
+[source, bash]
+----
+# ブランチ切り替え処理
+#
+# 引数
+#   1: 切り替え先ブランチ
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/switch.sh BRANCH
+----
+
+====== ブランチ追加
+
+[source, bash]
+----
+# ブランチ追加処理
+#
+# 引数
+#   1: 作成元（ブランチ or タグ or コミットハッシュ）
+#   2: 対象ブランチ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_add.sh FROM TO
+----
+
+====== ブランチリネーム
+
+[source, bash]
+----
+# ブランチリネーム処理
+#
+# 引数
+#   1: リネーム元ブランチ名
+#   2: リネーム先ブランチ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_rename.sh FROM TO
+----
+
+====== ブランチ削除
+
+[source, bash]
+----
+# ブランチ削除処理
+#
+# 引数
+#   1: 対象ブランチ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_remove.sh BRANCH
+----
+
+====== ブランチマージ
+
+[source, bash]
+----
+# ブランチ間マージ処理
+#
+# 引数
+#   1: マージ元ブランチ名
+#   2: マージ先ブランチ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_merge.sh FROM TO
+----
+
+
+===== タグ操作
+
+====== タグ一覧
+
+[source, bash]
+----
+# タグ一覧取得処理
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_list.sh 2>/dev/null
+----
+
+====== タグ存在確認
+
+[source, bash]
+----
+# タグ存在確認処理
+#
+# 引数
+#   1: 対象タグ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_is_exist.sh TAG 2>/dev/null
+----
+
+====== タグ追加
+
+[source, bash]
+----
+# タグ追加処理
+#
+# 引数
+#   1: 作成元（ブランチ or タグ or コミットハッシュ）
+#   2: 対象タグ名
+#   3: タグメッセージ
+#   4: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_add.sh FROM TO MESSAGE
+----
+
+====== タグリネーム
+
+[source, bash]
+----
+# タグリネーム処理
+#
+# 引数
+#   1: リネーム元タグ名
+#   2: リネーム先タグ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_rename.sh FROM TO
+----
+
+====== タグ削除
+
+[source, bash]
+----
+# タグ削除処理
+#
+# 引数
+#   1: 対象タグ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_remove.sh TAG
+----

@@ -15,6 +15,8 @@ DIR_BASE="$(pwd)"
 DIR_SRC="${DIR_BASE}/docs/adoc"
 DIR_DIST="${DIR_BASE}/docs"
 
+version="$(cat ${DIR_BASE}/src/VERSION)"
+
 
 #---------------------------------------------------------------------------------------------------
 # acsiidoctor
@@ -25,28 +27,18 @@ asciidoctor                                                                     
   -a lang=ja                                                                                       \
   -b html5                                                                                         \
   -d book                                                                                          \
-  --destination-dir ${DIR_DIST}                                                                    \
-  ${DIR_SRC}/index.adoc
+  --destination-dir "${DIR_DIST}"                                                                  \
+  --attribute linkcss \
+  --attribute stylesheet=rubygems.css \
+  --attribute stylesdir=./stylesheets \
+  --attribute Version=${version}                                                                   \
+  --attribute imagesdir=./images                                                                   \
+  "${DIR_SRC}/index.adoc"
 retcode=$?
-if [[ ${retcode} -ne 0 ]] || [[ ! -f ${DIR_DIST}/index.html ]]; then
+if [[ ${retcode} -ne 0 ]] || [[ ! -f "${DIR_DIST}/index.html" ]]; then
   echo "acsiidoctorでエラーが発生しました。" >&2
   exit 6
 fi
-
-
-#---------------------------------------------------------------------------------------------------
-# 相対パスの置換
-#---------------------------------------------------------------------------------------------------
-echo ""
-echo "相対パスの置換"
-path_dist=${DIR_DIST}/index.html
-mv ${path_dist} ${path_dist}.org
-
-cat ${path_dist}.org                                                                               |
-sed -e 's|../images/|images/|g'                                                                    |
-tee > ${path_dist}
-
-rm -f ${path_dist}.org
 
 echo ""
 echo "ビルドが完了しました。"

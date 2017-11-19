@@ -1,3 +1,6 @@
 === Generate Specification
 
-WARNING: TODO springfoxなど、swagger-coreの実装にお任せ
+https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-JAX-RS-Project-Setup-1.5.X[swagger-core] で、ソースからOASを生成できます。
+
+各言語への拡張などは https://swagger.io/open-source-integrations/ で紹介されています。
+利用するツールの利用方法に従ってください。

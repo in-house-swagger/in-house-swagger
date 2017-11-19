@@ -1,56 +1,82 @@
 ==== bin/generate
 
-codegen-cli の呼び出しに、カスタムtemplate, カスタムlanguageの考慮を加えた軽量なラッパーです。
+codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage (Generator) の考慮を加えた薄いラッパーです。
 codegen-cli自体の利用方法は https://github.com/swagger-api/swagger-codegen[codegen-cliのマニュアル] で確認してください。
 
-
-===== デフォルトlanguageでリソースを生成する
+===== Language (Generator)のオプションを確認する
 
 [source, bash]
 ----
+TARGET_LANGUAGE="typescript-angular"
+
+bin/generate \
+  config-help \
+  -l ${TARGET_LANGUAGE}
+----
+
+===== 組み込みLanguage (Generator)でリソースを生成する
+
+[source, bash]
+----
+SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+
 bin/generate \
   generate \
   -i http://localhost:9701/specs/${SPEC_ID} \
-  -l typescript-angular \
-  -o output/typescript-angular
+  -l ${TARGET_LANGUAGE} \
+  -o output/${TARGET_LANGUAGE}
+
 # 結果確認
-ls -l output/typescript-angular
+find output/${TARGET_LANGUAGE} -type f
 ----
 
-===== デフォルトlanguage + カスタムtemplate でリソースを生成する
+===== 組み込みLanguage (Generator) + カスタムTemplate でリソースを生成する
 
 [source, bash]
 ----
+SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+CUSTOM_TEMPLATE="CustomTemplateName"
+
 bin/generate \
   generate \
   -i http://localhost:9701/specs/${SPEC_ID} \
-  -l typescript-angular2 \
-  -t config/templates/_default/typescript-angular2 \
-  -o output/typescript-angular2
+  -l ${TARGET_LANGUAGE} \
+  -t config/templates/${CUSTOM_TEMPLATE} \
+  -o output/${TARGET_LANGUAGE}
+
 # 結果確認
-ls -l output/typescript-angular2
+find output/${TARGET_LANGUAGE} -type f
 ----
 
-===== カスタムlanguage(jar) でリソースを生成する
+===== カスタムLanguage (Generator) Jar形式 でリソースを生成する
 
 [source, bash]
 ----
+SPEC_ID="sample"
+TARGET_LANGUAGE="CustomLanguageName"
+
 bin/generate \
-  -cl CustomLanguageName \
+  -cl ${TARGET_LANGUAGE} \
   -i http://localhost:9701/specs/${SPEC_ID} \
-  -o output/CustomLanguageName
+  -o output/${TARGET_LANGUAGE}
+
 # 結果確認
-ls -l output/CustomLanguageName
+find output/${TARGET_LANGUAGE} -type f
 ----
 
-===== カスタムlanguage(groovy) でリソースを生成する
+===== カスタムLanguage (Generator) Groovy形式 でリソースを生成する
 
 [source, bash]
 ----
+TARGET_LANGUAGE="CustomLanguageNameGroovy"
+
 bin/generate \
-  -cl CustomLanguageNameGroovy \
+  -cl ${TARGET_LANGUAGE} \
   -i http://localhost:9701/specs/${SPEC_ID} \
-  -o output/CustomLanguageNameGroovy
+  -o output/${TARGET_LANGUAGE}
+
 # 結果確認
-ls -l output/CustomLanguageNameGroovy
+find output/${TARGET_LANGUAGE} -type f
 ----

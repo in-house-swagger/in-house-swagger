@@ -542,8 +542,8 @@ exit_on_fail ${retcode}
 
 log.remove_indent
 
-# デフォルトテンプレート
-log.info_console "デフォルトテンプレートの抽出"
+# 組み込みテンプレート
+log.info_console "組み込みテンプレートの抽出"
 log.add_indent
 
 dir_template_work="/tmp/work_$$"
@@ -569,7 +569,7 @@ xargs -I{} bash -c "mv {} ${dir_template_default}/"                             
 # 展開ディレクトリを削除
 rm -fr "${dir_template_work}"
 
-log.info_console "デフォルトテンプレート: ${dir_template_default}"
+log.info_console "組み込みテンプレート: ${dir_template_default}"
 ls "${dir_template_default}"
 
 log.remove_indent
