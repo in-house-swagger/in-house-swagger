@@ -8,7 +8,6 @@
 <title>in-house-swagger 0.4.0-SNAPSHOT</title>
 <link rel="stylesheet" href="./stylesheets/rubygems.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="./stylesheets/coderay-asciidoctor.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -24,7 +23,13 @@
 <li><a href="#_licenses">1.4. Licenses</a></li>
 </ul>
 </li>
-<li><a href="#_installation">2. Installation</a></li>
+<li><a href="#_installation">2. Installation</a>
+<ul class="sectlevel2">
+<li><a href="#_target_os">2.1. Target OS</a></li>
+<li><a href="#_dependencies">2.2. Dependencies</a></li>
+<li><a href="#_getting_started">2.3. Getting Started</a></li>
+</ul>
+</li>
 <li><a href="#_configuration">3. Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_config">3.1. config/</a>
@@ -178,8 +183,77 @@
 <div class="sect1">
 <h2 id="_installation">2. Installation</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_target_os">2.1. Target OS</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>RHEL-derivatives / Fedora</p>
+</li>
+<li>
+<p>Debian / Ubuntu</p>
+</li>
+<li>
+<p>OSX</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependencies">2.2. Dependencies</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">command</th>
+<th class="tableblock halign-left valign-top">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">curl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">md5sum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sha1sum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gpg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">git</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.7 or later</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jre 8 or later</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_getting_started">2.3. Getting Started</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>バージョンを選択</p>
+<div class="ulist">
+<ul>
+<li>
+<p>最新の安定版バージョンの場合: <code><code>version="0.4.0-SNAPSHOT"</code></code></p>
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>ダウンロード</p>
 </li>
@@ -187,19 +261,21 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">url_base=&quot;https://github.com/in-house-swagger/in-house-swagger/releases/download/${version}&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># アーカイブを選択
+#   通常版 ※installコマンド実行時にモジュールをダウンロード
+archive_name="in-house-swagger-${version}.tar.gz"
+#   モジュール同梱版
+archive_name="in-house-swagger-with-depends-${version}.tar.gz"
 
-# 通常版（installコマンド実行時にモジュールをダウンロード）を利用する場合
-archive_name=&quot;in-house-swagger-${version}.tar.gz&quot;
-# モジュール同梱版を利用する場合
-archive_name=&quot;in-house-swagger-with-depends-${version}.tar.gz&quot;
+# ダウンロードURL
+url_base="https://github.com/in-house-swagger/in-house-swagger/releases/download/${version}"
+download_url="${url_base}/${archive_name}"
 
-download_url=&quot;${url_base}/${archive_name}&quot;
-
+# ダウンロード
 curl \
   --request GET \
-  --url &quot;${download_url}&quot; \
-  --output &quot;${archive_name}&quot;</code></pre>
+  --url "${download_url}" \
+  --output "${archive_name}"</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -211,32 +287,90 @@ curl \
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">#-------------------------------------------------
-# インストール
-#-------------------------------------------------
-tar xf &quot;${archive_name}&quot;
-cd &quot;$(basename ${archive_name} .tar.gz)/&quot;
-bin/install
-
-#-------------------------------------------------
-# gitリモートリポジトリを利用する場合
-#-------------------------------------------------
-# リモートリポジトリURLを設定
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar xf "${archive_name}"
+cd "$(basename ${archive_name} .tar.gz)/"
+bin/install</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>gitリモートリポジトリを利用する場合のみ実施</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># リモートリポジトリURLを設定
 {
-  echo &quot;export GIT_REMOTE_REPOSITORY_URL=${YOUR_REPO_URL}&quot;
+  echo "export GIT_REMOTE_REPOSITORY_URL=${YOUR_REPO_URL}"
 } &gt;&gt; module/swagger-spec-mgr/config/swagger-spec-mgr.properties
 
 # 接続情報の暗号化
 {
-  echo &quot;GIT_ACCESS_USER=${YOUR_REPO_USER}&quot;
-  echo &quot;GIT_ACCESS_PASSWORD=${YOUR_REPO_PASSWORD}&quot;
+  echo "GIT_ACCESS_USER=${YOUR_REPO_USER}"
+  echo "GIT_ACCESS_PASSWORD=${YOUR_REPO_PASSWORD}"
 } &gt; module/swagger-spec-mgr/config/access_info
-module/swagger-spec-mgr/bin/mainte/encrypt_access_info.sh
-
-#-------------------------------------------------
-# デフォルトのgitコミットユーザを登録
-#-------------------------------------------------
-module/swagger-spec-mgr/bin/git/clone.sh</code></pre>
+module/swagger-spec-mgr/bin/mainte/encrypt_access_info.sh</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>デフォルトのgitコミットユーザを登録</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">module/swagger-spec-mgr/bin/git/clone.sh</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Server起動</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/server start</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>swagger-editor URL</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:9700/editor" class="bare">http://localhost:9700/editor</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>swagger-ui URL</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:9700/ui" class="bare">http://localhost:9700/ui</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>spec-mgr URL</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:9701" class="bare">http://localhost:9701</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -257,8 +391,8 @@ module/swagger-spec-mgr/bin/git/clone.sh</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties"># default: 9700
-# spec-mgr port = default + 1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># default: 9700
+# spec-mgr port: SERVER_PORT + 1
 SERVER_PORT=9700</code></pre>
 </div>
 </div>
@@ -271,8 +405,8 @@ SERVER_PORT=9700</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties"># jetty起動引数
-JETTY_ARGS=&quot;jetty.http.port=${SERVER_PORT}&quot;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># jetty起動引数
+JETTY_ARGS="jetty.http.port=${SERVER_PORT}"</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -284,10 +418,10 @@ JETTY_ARGS=&quot;jetty.http.port=${SERVER_PORT}&quot;</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties"># ダウンロードURL
-DOWNLOAD_URL_JETTY=&quot;http://central.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.6.v20170531/jetty-distribution-9.4.6.v20170531.tar.gz&quot;
-DOWNLOAD_URL_GROOVY=&quot;https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.12.zip&quot;
-DOWNLOAD_URL_CODEGEN_CLI=&quot;http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.2.3/swagger-codegen-cli-2.2.3.jar&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ダウンロードURL
+DOWNLOAD_URL_JETTY="http://central.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.6.v20170531/jetty-distribution-9.4.6.v20170531.tar.gz"
+DOWNLOAD_URL_GROOVY="https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.12.zip"
+DOWNLOAD_URL_CODEGEN_CLI="http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.2.3/swagger-codegen-cli-2.2.3.jar"
  :</code></pre>
 </div>
 </div>
@@ -300,7 +434,7 @@ DOWNLOAD_URL_CODEGEN_CLI=&quot;http://central.maven.org/maven2/io/swagger/swagge
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties"># ダウンロード検証(md5/sha1/bintray:project名/なし)
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ダウンロード検証(md5/sha1/bintray:project名/なし)
 CHECKSUM_JETTY=md5
 CHECKSUM_GROOVY=bintray:groovy
 CHECKSUM_CODEGEN_CLI=md5
@@ -322,9 +456,9 @@ CHECKSUM_CODEGEN_CLI=md5
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties">export SCM_DEFAULT_USER=&quot;spec-mgr&quot;
-export SCM_DEFAULT_EMAIL=&quot;spec-mgr@example.com&quot;
-export SCM_DEFAULT_COMMIT_MESSAGE=&quot;update API specifications.&quot;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export SCM_DEFAULT_USER="spec-mgr"
+export SCM_DEFAULT_EMAIL="spec-mgr@example.com"
+export SCM_DEFAULT_COMMIT_MESSAGE="update API specifications."</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -336,8 +470,8 @@ export SCM_DEFAULT_COMMIT_MESSAGE=&quot;update API specifications.&quot;</code><
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties"># リポジトリルートからのSpec管理ディレクトリ相対パス
-export RELDIR_SPECS=&quot;docs/design/swagger&quot;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># リポジトリルートからのSpec管理ディレクトリ相対パス
+export RELDIR_SPECS="docs/design/swagger"</code></pre>
 </div>
 </div>
 </div>
@@ -352,18 +486,18 @@ export RELDIR_SPECS=&quot;docs/design/swagger&quot;</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="comment"># 分割除外パス正規表現リスト</span>
-  <span class="key">splitIgnoreRegexList</span>:
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/info/.*</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/tags/.*</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/schemas/.*</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/securityDefinitions/.*</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/paths/.*/consumes</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/paths/.*/parameters</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/paths/.*/produces</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/paths/.*/responses</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/paths/.*/tags</span><span class="delimiter">&quot;</span></span>
-  - <span class="string"><span class="delimiter">&quot;</span><span class="content">/paths/.*/security</span><span class="delimiter">&quot;</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  # 分割除外パス正規表現リスト
+  splitIgnoreRegexList:
+  - "/info/.*"
+  - "/tags/.*"
+  - "/schemas/.*"
+  - "/securityDefinitions/.*"
+  - "/paths/.*/consumes"
+  - "/paths/.*/parameters"
+  - "/paths/.*/produces"
+  - "/paths/.*/responses"
+  - "/paths/.*/tags"
+  - "/paths/.*/security"</code></pre>
 </div>
 </div>
 </div>
@@ -381,7 +515,7 @@ export RELDIR_SPECS=&quot;docs/design/swagger&quot;</code></pre>
 <h5 id="_起動">起動</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">bin/server start</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/server start</code></pre>
 </div>
 </div>
 </div>
@@ -389,7 +523,7 @@ export RELDIR_SPECS=&quot;docs/design/swagger&quot;</code></pre>
 <h5 id="_停止">停止</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">bin/server stop</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/server stop</code></pre>
 </div>
 </div>
 </div>
@@ -397,7 +531,7 @@ export RELDIR_SPECS=&quot;docs/design/swagger&quot;</code></pre>
 <h5 id="_再起動">再起動</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">bin/server restart</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/server restart</code></pre>
 </div>
 </div>
 </div>
@@ -947,7 +1081,7 @@ codegen-cli自体の利用方法は <a href="https://github.com/swagger-api/swag
 <h5 id="_language_generator_のオプションを確認する">Language (Generator)のオプションを確認する</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">TARGET_LANGUAGE=&quot;typescript-angular&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">TARGET_LANGUAGE="typescript-angular"
 
 bin/generate \
   config-help \
@@ -959,8 +1093,8 @@ bin/generate \
 <h5 id="_組み込みlanguage_generator_でリソースを生成する">組み込みLanguage (Generator)でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">SPEC_ID=&quot;sample&quot;
-TARGET_LANGUAGE=&quot;typescript-angular&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
 
 bin/generate \
   generate \
@@ -977,9 +1111,9 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 <h5 id="_組み込みlanguage_generator_カスタムtemplate_でリソースを生成する">組み込みLanguage (Generator) + カスタムTemplate でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">SPEC_ID=&quot;sample&quot;
-TARGET_LANGUAGE=&quot;typescript-angular&quot;
-CUSTOM_TEMPLATE=&quot;CustomTemplateName&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+CUSTOM_TEMPLATE="CustomTemplateName"
 
 bin/generate \
   generate \
@@ -997,8 +1131,8 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 <h5 id="_カスタムlanguage_generator_jar形式_でリソースを生成する">カスタムLanguage (Generator) Jar形式 でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">SPEC_ID=&quot;sample&quot;
-TARGET_LANGUAGE=&quot;CustomLanguageName&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SPEC_ID="sample"
+TARGET_LANGUAGE="CustomLanguageName"
 
 bin/generate \
   -cl ${TARGET_LANGUAGE} \
@@ -1014,7 +1148,7 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 <h5 id="_カスタムlanguage_generator_groovy形式_でリソースを生成する">カスタムLanguage (Generator) Groovy形式 でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">TARGET_LANGUAGE=&quot;CustomLanguageNameGroovy&quot;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">TARGET_LANGUAGE="CustomLanguageNameGroovy"
 
 bin/generate \
   -cl ${TARGET_LANGUAGE} \
@@ -1033,7 +1167,7 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 <h5 id="_user追加_clone_init">User追加 (clone/init)</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># リポジトリ初期化処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># リポジトリ初期化処理
 #   GIT_REMOTE_REPOSITORY_URL が定義されている場合、git clone
 #   定義されていない場合、git init を実行します。
 #
@@ -1053,7 +1187,7 @@ module/swagger-spec-mgr/bin/git/clone.sh</code></pre>
 <h5 id="_remoteリポジトリ設定">remoteリポジトリ設定</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># remote origin設定処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># remote origin設定処理
 #
 # 引数
 #   1: リモートリポジトリURL
@@ -1069,7 +1203,7 @@ module/swagger-spec-mgr/bin/git/add_origin.sh REMOTE_URL</code></pre>
 <h6 id="_commit_pull">commit/pull</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># リポジトリ更新取得処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># リポジトリ更新取得処理
 #   リモートリポジトリ が設定されている場合、カレントブランチで、git pull
 #   定義されていない場合、スキップします。
 #
@@ -1084,7 +1218,7 @@ module/swagger-spec-mgr/bin/git/pull.sh</code></pre>
 <h6 id="_push">push</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># リポジトリ更新反映処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># リポジトリ更新反映処理
 #   リモートリポジトリ が設定されている場合、git commit &amp; push
 #   定義されていない場合、git commit だけを実行します。
 #
@@ -1103,7 +1237,7 @@ module/swagger-spec-mgr/bin/git/push.sh MESSAGE</code></pre>
 <h6 id="_ブランチ一覧">ブランチ一覧</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチ一覧取得処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチ一覧取得処理
 #
 # 引数
 #   1: コミットユーザ ※任意
@@ -1116,7 +1250,7 @@ module/swagger-spec-mgr/bin/git/branch_list.sh 2&gt;/dev/null</code></pre>
 <h6 id="_ブランチ存在確認">ブランチ存在確認</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチ存在確認処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチ存在確認処理
 #
 # 引数
 #   1: 対象ブランチ名
@@ -1130,7 +1264,7 @@ module/swagger-spec-mgr/bin/git/branch_is_exist.sh BRANCH 2&gt;/dev/null</code><
 <h6 id="_カレントブランチ確認">カレントブランチ確認</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># 現在ブランチ存在確認処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 現在ブランチ存在確認処理
 #
 # 引数
 #   1: コミットユーザ ※任意
@@ -1143,7 +1277,7 @@ module/swagger-spec-mgr/bin/git/branch_get_current.sh 2&gt;/dev/null</code></pre
 <h6 id="_ブランチ切り替え">ブランチ切り替え</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチ切り替え処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチ切り替え処理
 #
 # 引数
 #   1: 切り替え先ブランチ
@@ -1157,7 +1291,7 @@ module/swagger-spec-mgr/bin/git/switch.sh BRANCH</code></pre>
 <h6 id="_ブランチ追加">ブランチ追加</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチ追加処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチ追加処理
 #
 # 引数
 #   1: 作成元（ブランチ or タグ or コミットハッシュ）
@@ -1172,7 +1306,7 @@ module/swagger-spec-mgr/bin/git/branch_add.sh FROM TO</code></pre>
 <h6 id="_ブランチリネーム">ブランチリネーム</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチリネーム処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチリネーム処理
 #
 # 引数
 #   1: リネーム元ブランチ名
@@ -1187,7 +1321,7 @@ module/swagger-spec-mgr/bin/git/branch_rename.sh FROM TO</code></pre>
 <h6 id="_ブランチ削除">ブランチ削除</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチ削除処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチ削除処理
 #
 # 引数
 #   1: 対象ブランチ名
@@ -1201,7 +1335,7 @@ module/swagger-spec-mgr/bin/git/branch_remove.sh BRANCH</code></pre>
 <h6 id="_ブランチマージ">ブランチマージ</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># ブランチ間マージ処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># ブランチ間マージ処理
 #
 # 引数
 #   1: マージ元ブランチ名
@@ -1219,7 +1353,7 @@ module/swagger-spec-mgr/bin/git/branch_merge.sh FROM TO</code></pre>
 <h6 id="_タグ一覧">タグ一覧</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># タグ一覧取得処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># タグ一覧取得処理
 #
 # 引数
 #   1: コミットユーザ ※任意
@@ -1232,7 +1366,7 @@ module/swagger-spec-mgr/bin/git/tag_list.sh 2&gt;/dev/null</code></pre>
 <h6 id="_タグ存在確認">タグ存在確認</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># タグ存在確認処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># タグ存在確認処理
 #
 # 引数
 #   1: 対象タグ名
@@ -1246,7 +1380,7 @@ module/swagger-spec-mgr/bin/git/tag_is_exist.sh TAG 2&gt;/dev/null</code></pre>
 <h6 id="_タグ追加">タグ追加</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># タグ追加処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># タグ追加処理
 #
 # 引数
 #   1: 作成元（ブランチ or タグ or コミットハッシュ）
@@ -1262,7 +1396,7 @@ module/swagger-spec-mgr/bin/git/tag_add.sh FROM TO MESSAGE</code></pre>
 <h6 id="_タグリネーム">タグリネーム</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># タグリネーム処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># タグリネーム処理
 #
 # 引数
 #   1: リネーム元タグ名
@@ -1277,7 +1411,7 @@ module/swagger-spec-mgr/bin/git/tag_rename.sh FROM TO</code></pre>
 <h6 id="_タグ削除">タグ削除</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># タグ削除処理
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># タグ削除処理
 #
 # 引数
 #   1: 対象タグ名
@@ -1313,7 +1447,7 @@ module/swagger-spec-mgr/bin/git/tag_remove.sh TAG</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">mkdir config/templates/yourCustomTemplateName
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir config/templates/yourCustomTemplateName
 cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomTemplateName/</code></pre>
 </div>
 </div>
@@ -1350,7 +1484,7 @@ bin/generate、swagger-editorのgenerate機能 で利用できます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">bin/generate meta \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/generate meta \
   -o path/to/yourCustomGeneratorWorkspace \
   -n yourCustomGeneratorName \
   -p com.domain.your</code></pre>
@@ -1378,7 +1512,7 @@ bin/generate、swagger-editorのgenerate機能 で利用できます。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">cd path/to/yourCustomGeneratorWorkspace/
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd path/to/yourCustomGeneratorWorkspace/
 mvn package</code></pre>
 </div>
 </div>
@@ -1391,7 +1525,7 @@ mvn package</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">cd ${IN-HOUSE-SWAGGER_HOME}
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ${IN-HOUSE-SWAGGER_HOME}
 mkdir config/generators/yourCustomGeneratorName
 mv path/to/yourCustomGeneratorWorkspace/target/yourCustomGeneratorName_*.jar config/generators/yourCustomGeneratorName/</code></pre>
 </div>
@@ -1405,7 +1539,7 @@ mv path/to/yourCustomGeneratorWorkspace/target/yourCustomGeneratorName_*.jar con
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">bin/server restart</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/server restart</code></pre>
 </div>
 </div>
 </div>
@@ -1420,7 +1554,7 @@ mv path/to/yourCustomGeneratorWorkspace/target/yourCustomGeneratorName_*.jar con
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">mkdir -p config/generators/yourCustomGeneratorName/generator
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p config/generators/yourCustomGeneratorName/generator
 touch config/generators/yourCustomGeneratorName/generator/yourCustomGeneratorName.groovy</code></pre>
 </div>
 </div>
@@ -1433,7 +1567,7 @@ touch config/generators/yourCustomGeneratorName/generator/yourCustomGeneratorNam
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">mkdir config/generators/yourCustomGeneratorName/template
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir config/generators/yourCustomGeneratorName/template
 cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomGeneratorName/template/</code></pre>
 </div>
 </div>
@@ -1459,8 +1593,11 @@ cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomGenerat
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-19 14:37:55 JST
+Last updated 2017-11-19 23:05:05 JST
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

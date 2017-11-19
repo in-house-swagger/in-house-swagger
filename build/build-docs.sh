@@ -28,9 +28,10 @@ asciidoctor                                                                     
   -b html5                                                                                         \
   -d book                                                                                          \
   --destination-dir "${DIR_DIST}"                                                                  \
-  --attribute linkcss \
-  --attribute stylesheet=rubygems.css \
-  --attribute stylesdir=./stylesheets \
+  --attribute source-highlighter=highlightjs                                                       \
+  --attribute linkcss                                                                              \
+  --attribute stylesheet=rubygems.css                                                              \
+  --attribute stylesdir=./stylesheets                                                              \
   --attribute Version=${version}                                                                   \
   --attribute imagesdir=./images                                                                   \
   "${DIR_SRC}/index.adoc"

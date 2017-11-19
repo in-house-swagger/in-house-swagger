@@ -4,7 +4,7 @@
 
 * デフォルトのコミット設定を変更する
 
-[source, properties]
+[source, bash]
 ----
 export SCM_DEFAULT_USER="spec-mgr"
 export SCM_DEFAULT_EMAIL="spec-mgr@example.com"
@@ -13,7 +13,7 @@ export SCM_DEFAULT_COMMIT_MESSAGE="update API specifications."
 
 * Specの管理ディレクトリを変更する
 
-[source, properties]
+[source, bash]
 ----
 # リポジトリルートからのSpec管理ディレクトリ相対パス
 export RELDIR_SPECS="docs/design/swagger"

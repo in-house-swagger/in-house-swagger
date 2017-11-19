@@ -1,6 +1,6 @@
 // :Version: 0.0.0
 // :author: name
-:source-highlighter: coderay
+// :source-highlighter: coderay
 :sectnums:
 //:chapter-label:
 :toc: left

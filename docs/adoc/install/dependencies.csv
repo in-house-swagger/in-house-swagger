@@ -1,0 +1,7 @@
+command, version
+curl, -
+md5sum, -
+sha1sum, -
+gpg, -
+git, 1.7 or later
+java, jre 8 or later
