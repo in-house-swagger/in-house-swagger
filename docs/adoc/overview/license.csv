@@ -1,0 +1,8 @@
+product,license,message
+in-house-swagger,https://github.com/in-house-swagger/in-house-swagger/blob/master/LICENSE[Apache License 2.0],-
+swagger-editor,https://github.com/swagger-api/swagger-editor/blob/master/LICENSE[Apache License 2.0],https://github.com/in-house-swagger/swagger-editor/compare/master...in-house-swagger:feature/in-house[changes]
+swagger-ui,https://github.com/swagger-api/swagger-ui/blob/master/LICENSE[Apache License 2.0],https://github.com/in-house-swagger/swagger-ui/compare/master...in-house-swagger:feature/in-house[changes]
+swagger-codegen,https://github.com/swagger-api/swagger-codegen/blob/master/LICENSE[Apache License 2.0],-
+swagger2markup,https://github.com/Swagger2Markup/swagger2markup/blob/master/LICENSE.txt[Apache License 2.0],-
+swagger-spec-mgr,https://github.com/in-house-swagger/swagger-spec-mgr/blob/master/LICENSE[Apache License 2.0],-
+Smashicons,https://file000.flaticon.com/downloads/license/license.pdf[Flaticon Basic License],image icons designed by Smashicons from Flaticon

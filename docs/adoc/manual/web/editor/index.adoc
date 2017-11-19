@@ -1,0 +1,15 @@
+==== Swagger Editor
+
+TIP: デフォルト設定の場合、 http://localhost:9700/editor でアクセスできます。
+
+include::spec.adoc[]
+
+include::edit.adoc[]
+
+include::branch.adoc[]
+
+include::tag.adoc[]
+
+include::user.adoc[]
+
+include::generate.adoc[]

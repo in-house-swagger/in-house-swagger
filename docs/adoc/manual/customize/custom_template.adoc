@@ -1,0 +1,12 @@
+==== Custom Template
+
+* Template実装
+
+[source, bash]
+----
+mkdir config/templates/yourCustomTemplateName
+cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomTemplateName/
+----
+
+* 参考リンク
+** https://qiita.com/Quramy/items/c583f3213f0b77ff1bac

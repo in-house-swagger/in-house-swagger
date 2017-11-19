@@ -1,0 +1,31 @@
+== Overview
+
+image::overview.png[]
+
+
+=== Feature
+
+. swagger tools(editor, generator, ui, validator, codegen-cli), swagger2markup, spec-mgr を一括インストール
+. generator、codegen-cli のカスタマイズ内容をconfigディレクトリで一元管理
+. editorから、generator optionを指定してリソースを自動生成
+. https://github.com/OAI/OpenAPI-Specification[Open API Specification (OAS)] を、json-refsで分割管理
+. https://github.com/OAI/OpenAPI-Specification[Open API Specification (OAS)] を、Git管理(branch, tag, commit user, commit message)
+
+image::editor_github-flow.gif[]
+
+=== Workflow
+
+image::workflow.png[]
+
+
+=== Architecture
+
+image::architecture.png[]
+
+
+=== Licenses
+
+[format="csv", options="header"]
+|===
+include::license.csv[]
+|===
