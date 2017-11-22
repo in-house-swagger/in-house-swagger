@@ -22,8 +22,11 @@ function local.update(){
 function local.ps(){
   docker ps
 }
+function local.shell(){
+  docker exec -it in-house-swagger /bin/bash
+}
 function local.usage(){
-  echo "$0 start|stop|logs|update|ps|usage"
+  echo "$0 start|stop|logs|update|ps|shell|usage"
 }
 
 case "$1" in
@@ -41,6 +44,9 @@ case "$1" in
     ;;
   ps)
     local.ps
+	  ;;
+  shell)
+    local.shell
 	  ;;
   *)
     local.usage
