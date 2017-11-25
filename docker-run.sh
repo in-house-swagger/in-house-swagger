@@ -4,7 +4,7 @@
 function local.start(){
   # docker内部のディレクトリ参照は -v で指定可能。
   # bg起動のため、結果は logs で確認
-  docker run -d -p 9700:9700 -p 9701:9701 --name in-house-swagger in-house-swagger:test
+  docker run -d -p 9700:9700 -p 9701:9701 --name in-house-swagger in-house-swagger:$(cat ./src/VERSION)
 }
 function local.stop(){
   # 停止＆イメージ削除
@@ -17,7 +17,7 @@ function local.logs(){
 function local.update(){
   # dockerイメージ更新
   local.stop
-  docker build --no-cache -t in-house-swagger:test .
+  docker build --no-cache -t in-house-swagger:$(cat ./src/VERSION) .
 }
 function local.ps(){
   docker ps
