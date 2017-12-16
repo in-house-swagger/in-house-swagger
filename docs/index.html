@@ -5,13 +5,13 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>in-house-swagger 0.4.0</title>
-<link rel="stylesheet" href="./stylesheets/rubygems.css">
+<title>in-house-swagger 0.5.0-SNAPSHOT</title>
+<link rel="stylesheet" href="./stylesheets/readthedocs.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>in-house-swagger 0.4.0</h1>
+<h1>in-house-swagger 0.5.0-SNAPSHOT</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -86,7 +86,7 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>swagger tools(editor, generator, ui, validator, codegen-cli), swagger2markup, spec-mgr を一括インストール</p>
+<p>swagger tools（editor, generator, ui, validator, codegen-cli）, swagger2markup, spec-mgr を一括インストール</p>
 </li>
 <li>
 <p>generator、codegen-cli のカスタマイズ内容をconfigディレクトリで一元管理</p>
@@ -95,10 +95,10 @@
 <p>editorから、generator optionを指定してリソースを自動生成</p>
 </li>
 <li>
-<p><a href="https://github.com/OAI/OpenAPI-Specification">Open API Specification (OAS)</a> を、json-refsで分割管理</p>
+<p><a href="https://github.com/OAI/OpenAPI-Specification">Open API Specification（OAS）</a> を、json-refsで分割管理</p>
 </li>
 <li>
-<p><a href="https://github.com/OAI/OpenAPI-Specification">Open API Specification (OAS)</a> を、Git管理(branch, tag, commit user, commit message)</p>
+<p><a href="https://github.com/OAI/OpenAPI-Specification">Open API Specification（OAS）</a> を、Git管理（branch, tag, commit user, commit message）</p>
 </li>
 </ol>
 </div>
@@ -249,7 +249,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p>最新の安定版バージョンの場合: <code><code>version="0.4.0"</code></code></p>
+<p>最新安定版バージョンの場合: <code><code>version="0.5.0-SNAPSHOT"</code></code></p>
 </li>
 </ul>
 </div>
@@ -945,14 +945,14 @@ Gitリモートリポジトリを利用しない場合、ユーザごとに異�
 <div class="sect4">
 <h5 id="_generate">Generate</h5>
 <div class="paragraph">
-<p>Language (Generator)毎に対応しているオプションを指定できます。</p>
+<p>Language（Generator）毎に対応しているオプションを指定できます。</p>
 </div>
 <div class="sect5">
 <h6 id="_serverリソースの生成">Serverリソースの生成</h6>
 <div class="ulist">
 <ul>
 <li>
-<p>generate server &gt; 対象のLanguage (Generator) をクリック</p>
+<p>generate server &gt; 対象のLanguage（Generator） をクリック</p>
 </li>
 </ul>
 </div>
@@ -1004,7 +1004,7 @@ Gitリモートリポジトリを利用しない場合、ユーザごとに異�
 <div class="ulist">
 <ul>
 <li>
-<p>generate client &gt; 対象のLanguage (Generator) をクリック</p>
+<p>generate client &gt; 対象のLanguage（Generator） をクリック</p>
 </li>
 </ul>
 </div>
@@ -1054,7 +1054,7 @@ Gitリモートリポジトリを利用しない場合、ユーザごとに異�
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>ヘッダーのURLを <a href="http://localhost:9701/specs/${SPEC_ID}" class="bare">http://localhost:9701/specs/${SPEC_ID}</a> に変更</p>
+<p>headerのURLを <a href="http://localhost:9701/specs/${SPEC_ID}" class="bare">http://localhost:9701/specs/${SPEC_ID}</a> に変更</p>
 </li>
 <li>
 <p>Explore ボタンをクリック</p>
@@ -1074,11 +1074,11 @@ Gitリモートリポジトリを利用しない場合、ユーザごとに異�
 <div class="sect3">
 <h4 id="_bin_generate">4.2.1. bin/generate</h4>
 <div class="paragraph">
-<p>codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage (Generator) の考慮を加えた薄いラッパーです。
+<p>codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage（Generator） の考慮を加えた薄いwrapperです。
 codegen-cli自体の利用方法は <a href="https://github.com/swagger-api/swagger-codegen">codegen-cliのマニュアル</a> で確認してください。</p>
 </div>
 <div class="sect4">
-<h5 id="_language_generator_のオプションを確認する">Language (Generator)のオプションを確認する</h5>
+<h5 id="_language_generator_のオプションを確認する">Language（Generator）のオプションを確認する</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">TARGET_LANGUAGE="typescript-angular"
@@ -1090,7 +1090,7 @@ bin/generate \
 </div>
 </div>
 <div class="sect4">
-<h5 id="_組み込みlanguage_generator_でリソースを生成する">組み込みLanguage (Generator)でリソースを生成する</h5>
+<h5 id="_組み込みlanguage_generator_でリソースを生成する">組み込みLanguage（Generator）でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SPEC_ID="sample"
@@ -1108,7 +1108,7 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_組み込みlanguage_generator_カスタムtemplate_でリソースを生成する">組み込みLanguage (Generator) + カスタムTemplate でリソースを生成する</h5>
+<h5 id="_組み込みlanguage_generator_カスタムtemplate_でリソースを生成する">組み込みLanguage（Generator） + カスタムTemplate でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SPEC_ID="sample"
@@ -1128,7 +1128,7 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_カスタムlanguage_generator_jar形式_でリソースを生成する">カスタムLanguage (Generator) Jar形式 でリソースを生成する</h5>
+<h5 id="_カスタムlanguage_generator_jar形式_でリソースを生成する">カスタムLanguage（Generator） Jar形式 でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SPEC_ID="sample"
@@ -1145,7 +1145,7 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_カスタムlanguage_generator_groovy形式_でリソースを生成する">カスタムLanguage (Generator) Groovy形式 でリソースを生成する</h5>
+<h5 id="_カスタムlanguage_generator_groovy形式_でリソースを生成する">カスタムLanguage（Generator） Groovy形式 でリソースを生成する</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">TARGET_LANGUAGE="CustomLanguageNameGroovy"
@@ -1164,7 +1164,7 @@ find output/${TARGET_LANGUAGE} -type f</code></pre>
 <div class="sect3">
 <h4 id="_module_swagger_spec_mgr_bin_git">4.2.2. module/swagger-spec-mgr/bin/git/</h4>
 <div class="sect4">
-<h5 id="_user追加_clone_init">User追加 (clone/init)</h5>
+<h5 id="_user追加_clone_init">User追加（clone/init）</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># リポジトリ初期化処理
@@ -1472,7 +1472,7 @@ cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomTemplat
 <h5 id="_java">Java</h5>
 <div class="paragraph">
 <p>swagger-codegenで提供されているカスタマイズ方法です。
-Javaで実装し、buildしたjarを、config/generators配下 のディレクトリに配置すると
+buildしたjarを config/generators 配下のディレクトリに配置すると
 bin/generate、swagger-editorのgenerate機能 で利用できます。</p>
 </div>
 <div class="ulist">
@@ -1593,7 +1593,7 @@ cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomGenerat
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-20 09:36:42 JST
+Last updated 2017-12-16 22:20:51 JST
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">

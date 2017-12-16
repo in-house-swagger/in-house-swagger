@@ -30,7 +30,7 @@ asciidoctor                                                                     
   --destination-dir "${DIR_DIST}"                                                                  \
   --attribute source-highlighter=highlightjs                                                       \
   --attribute linkcss                                                                              \
-  --attribute stylesheet=rubygems.css                                                              \
+  --attribute stylesheet=readthedocs.css                                                           \
   --attribute stylesdir=./stylesheets                                                              \
   --attribute Version=${version}                                                                   \
   --attribute imagesdir=./images                                                                   \

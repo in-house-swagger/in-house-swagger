@@ -23,14 +23,14 @@ function local.html(){
     -D${BUILDDIR}/html                \
     -a source-highlighter=highlightjs \
     -a linkcss                        \
-    -a stylesheet=rubygems.css        \
+    -a stylesheet=readthedocs.css     \
     -a stylesdir=./stylesheets        \
     -a Version=${VERSION}             \
     -a imagesdir=./images             \
     ${SOURCEDIR}/adoc/index.adoc
   echo "Build finished. The HTML pages are in ${BUILDDIR}/html"
 }
-  
+
 function local.check(){
   find ${SOURCEDIR} -type f -name '*.adoc' | xargs redpen -f asciidoc -c redpen-conf.xml
 }
@@ -49,4 +49,3 @@ check)
   echo "Usage: $0 clean|html|pdf|check"
   ;;
 esac
-
