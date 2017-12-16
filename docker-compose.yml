@@ -1,0 +1,9 @@
+version: '3'
+services:
+  in-house-swagger:
+    build:
+      context: "."
+      dockerfile: "Dockerfile"
+    ports:
+      - "9700:9700"
+      - "9701:9701"
