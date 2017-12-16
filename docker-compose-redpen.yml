@@ -1,0 +1,10 @@
+version: '3'
+services:
+  redpen:
+    build:
+      context: "."
+      dockerfile: "Dockerfile.redpen"
+    volumes:
+      - /tmp/build:/build
+      - ./docs:/docs
+      - ./redpen-conf.xml:/redpen-conf.xml
