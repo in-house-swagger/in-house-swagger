@@ -3,7 +3,7 @@
 ===== Java
 
 swagger-codegenで提供されているカスタマイズ方法です。
-Javaで実装し、buildしたjarを、config/generators配下 のディレクトリに配置すると
+buildしたjarを config/generators 配下のディレクトリに配置すると
 bin/generate、swagger-editorのgenerate機能 で利用できます。
 
 * スキャフォルドの生成

@@ -1,10 +1,10 @@
 ===== Generate
 
-Language (Generator)毎に対応しているオプションを指定できます。
+Language（Generator）毎に対応しているオプションを指定できます。
 
 ====== Serverリソースの生成
 
-* generate server > 対象のLanguage (Generator) をクリック
+* generate server > 対象のLanguage（Generator） をクリック
 
 image::editor/menu_generate_server.png[]
 
@@ -23,7 +23,7 @@ image::editor/popup_generate_server_value.png[]
 
 ====== Clientリソースの生成
 
-* generate client > 対象のLanguage (Generator) をクリック
+* generate client > 対象のLanguage（Generator） をクリック
 
 image::editor/menu_generate_client.png[]
 
