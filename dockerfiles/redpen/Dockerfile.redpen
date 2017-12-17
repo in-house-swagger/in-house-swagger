@@ -7,7 +7,7 @@ RUN ln -sf /usr/redpen-distribution-1.10.1/bin/redpen /usr/bin/redpen
 RUN apt install -y ruby
 RUN gem install asciidoctor
 
-COPY ./entry-point-redpen.sh /entry-point-redpen.sh
+COPY ./dockerfiles/redpen/entry-point-redpen.sh /entry-point-redpen.sh
 
 ENTRYPOINT ["/entry-point-redpen.sh"]
 CMD ["check"]

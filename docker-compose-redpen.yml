@@ -3,8 +3,8 @@ services:
   redpen:
     build:
       context: "."
-      dockerfile: "Dockerfile.redpen"
+      dockerfile: "./dockerfiles/redpen/Dockerfile.redpen"
     volumes:
-      - /tmp/build:/build
+      - ./build:/build
       - ./docs:/docs
-      - ./redpen-conf.xml:/redpen-conf.xml
+      - ./src:/src
