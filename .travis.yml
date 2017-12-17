@@ -1,0 +1,14 @@
+language: ruby
+rvm:
+  - 2.3.3-p222
+env:
+  - URL=https://github.com/redpen-cc/redpen/releases/download/redpen-1.10.1
+install:
+  - wget $URL/redpen-1.10.1.tar.gz
+  - tar xvf redpen-1.10.1.tar.gz
+  - export PATH=$PATH:$PWD/redpen-distribution-1.10.1/bin
+  - gem install asciidoctor
+  - sudo apt-get update && sudo apt-get install oracle-java8-installer 
+script:
+  - ./build/build-docs.sh check     # RedPenを適用する
+  - ./build/build-docs.sh html      # 出力ドキュメント（HTML）の生成
