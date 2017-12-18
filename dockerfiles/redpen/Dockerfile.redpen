@@ -1,0 +1,13 @@
+FROM openjdk:8-jdk
+
+RUN apt update -y
+RUN wget https://github.com/redpen-cc/redpen/releases/download/redpen-1.10.1/redpen-1.10.1.tar.gz
+RUN tar xzf /redpen-1.10.1.tar.gz -C /usr
+RUN ln -sf /usr/redpen-distribution-1.10.1/bin/redpen /usr/bin/redpen
+RUN apt install -y ruby
+RUN gem install asciidoctor
+
+COPY ./dockerfiles/redpen/entry-point-redpen.sh /entry-point-redpen.sh
+
+ENTRYPOINT ["/entry-point-redpen.sh"]
+CMD ["check"]

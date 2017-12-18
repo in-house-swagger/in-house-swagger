@@ -1,0 +1,10 @@
+version: '3'
+services:
+  redpen:
+    build:
+      context: "."
+      dockerfile: "./dockerfiles/redpen/Dockerfile.redpen"
+    volumes:
+      - ./build:/build
+      - ./docs:/docs
+      - ./src:/src

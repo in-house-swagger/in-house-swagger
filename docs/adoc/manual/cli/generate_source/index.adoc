@@ -1,9 +1,9 @@
 ==== bin/generate
 
-codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage (Generator) の考慮を加えた薄いラッパーです。
+codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage（Generator） の考慮を加えた薄いwrapperです。
 codegen-cli自体の利用方法は https://github.com/swagger-api/swagger-codegen[codegen-cliのマニュアル] で確認してください。
 
-===== Language (Generator)のオプションを確認する
+===== Language（Generator）のオプションを確認する
 
 [source, bash]
 ----
@@ -14,7 +14,7 @@ bin/generate \
   -l ${TARGET_LANGUAGE}
 ----
 
-===== 組み込みLanguage (Generator)でリソースを生成する
+===== 組み込みLanguage（Generator）でリソースを生成する
 
 [source, bash]
 ----
@@ -31,7 +31,7 @@ bin/generate \
 find output/${TARGET_LANGUAGE} -type f
 ----
 
-===== 組み込みLanguage (Generator) + カスタムTemplate でリソースを生成する
+===== 組み込みLanguage（Generator） + カスタムTemplate でリソースを生成する
 
 [source, bash]
 ----
@@ -50,7 +50,7 @@ bin/generate \
 find output/${TARGET_LANGUAGE} -type f
 ----
 
-===== カスタムLanguage (Generator) Jar形式 でリソースを生成する
+===== カスタムLanguage（Generator） Jar形式 でリソースを生成する
 
 [source, bash]
 ----
@@ -66,7 +66,7 @@ bin/generate \
 find output/${TARGET_LANGUAGE} -type f
 ----
 
-===== カスタムLanguage (Generator) Groovy形式 でリソースを生成する
+===== カスタムLanguage（Generator） Groovy形式 でリソースを生成する
 
 [source, bash]
 ----

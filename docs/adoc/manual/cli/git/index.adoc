@@ -1,6 +1,6 @@
 ==== module/swagger-spec-mgr/bin/git/
 
-===== User追加 (clone/init)
+===== User追加（clone/init）
 
 [source, bash]
 ----

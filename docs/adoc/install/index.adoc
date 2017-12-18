@@ -17,7 +17,7 @@ include::dependencies.csv[]
 === Getting Started
 
 - バージョンを選択
-** 最新の安定版バージョンの場合: ```version="{Version}"```
+** 最新安定版バージョンの場合: ```version="{Version}"```
 
 
 - ダウンロード
