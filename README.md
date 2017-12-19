@@ -1,2 +1,5 @@
 # in-house-swagger
-in-house swagger-editor, swagger-generator, swagger-ui server + swagger-codegen-cli
+
+in-house swagger-tools
+
+[![Build Status](https://travis-ci.org/in-house-swagger/in-house-swagger.svg?branch=master)](https://travis-ci.org/in-house-swagger/in-house-swagger)
