@@ -1,0 +1,9 @@
+version: '3'
+services:
+  travis:
+    build:
+      context: "."
+      dockerfile: "dockerfiles/travis/Dockerfile"
+    volumes:
+      - ./dockerfiles/travis/entrypoint.sh:/home/travis/entrypoint.sh
+      - ./:/home/travis/target # travis-ci対象のディレクトリ。 /.travis.ymlが存在すること/git管理がされていること
