@@ -25,7 +25,7 @@
 #--------------------------------------------------------------------------------------------------
 # 環境設定
 #--------------------------------------------------------------------------------------------------
-CMDNAME=`basename $0`
+CMDNAME=$(basename $0)
 USAGE="Usage: $CMDNAME [-v] DIR_OLD DIR_NEW"
 
 # 終了コード
@@ -33,7 +33,7 @@ readonly EXITCODE_SUCCESS=0
 readonly EXITCODE_WARN=3
 readonly EXITCODE_ERROR=6
 
-DIR_CUR=`pwd`
+DIR_CUR=$(pwd)
 DIR_WORK=/tmp/${CMDNAME}_$$
 PATH_OLD_FILES=${DIR_WORK}/files_old
 PATH_NEW_FILES=${DIR_WORK}/files_new
@@ -50,7 +50,7 @@ verbose=false
 # 事前処理
 #--------------------------------------------------------------------------------------------------
 # 強制終了時の処理定義
-trap `rm -fr ${DIR_WORK}; exit ${EXITCODE_ERROR}` SIGHUP SIGINT SIGQUIT SIGTERM
+trap $(rm -fr ${DIR_WORK}; exit ${EXITCODE_ERROR}) SIGHUP SIGINT SIGQUIT SIGTERM
 
 # オプション解析
 while :; do
@@ -115,8 +115,8 @@ cat ${PATH_OLD_FILES} ${PATH_NEW_FILES} | sort | uniq -d > ${PATH_COMMON_FILES}
 cat ${PATH_OLD_FILES} ${PATH_ALL_FILES} | sort | uniq -u > ${PATH_TMP}
 if [ -s ${PATH_TMP} ]; then
   diff_finded=true
-  for cur_file_path in `cat ${PATH_TMP}`; do
-    cur_file_path=`expr ${cur_file_path} : '..\(.*\)'`
+  for cur_file_path in $(cat ${PATH_TMP}); do
+    cur_file_path=$(expr ${cur_file_path} : '..\(.*\)')
     echo "A ${cur_file_path}" >> ${PATH_OUT_TMP}
   done
 fi
@@ -125,18 +125,18 @@ fi
 cat ${PATH_NEW_FILES} ${PATH_ALL_FILES} | sort | uniq -u > ${PATH_TMP}
 if [ -s ${PATH_TMP} ]; then
   diff_finded=true
-  for cur_file_path in `cat $PATH_TMP`; do
-    cur_file_path=`expr ${cur_file_path} : '..\(.*\)'`
+  for cur_file_path in $(cat $PATH_TMP); do
+    cur_file_path=$(expr ${cur_file_path} : '..\(.*\)')
     echo "D $cur_file_path" >> ${PATH_OUT_TMP}
   done
 fi
 
 # 更新チェック
-for cur_file_path in `cat ${PATH_COMMON_FILES}`; do
+for cur_file_path in $(cat ${PATH_COMMON_FILES}); do
   cmp -s ${DIR_OLD}/${cur_file_path} ${DIR_NEW}/${cur_file_path}
   if [ $? -ne 0 ]; then
     diff_finded=true
-    cur_file_path=`expr ${cur_file_path} : '..\(.*\)'`
+    cur_file_path=$(expr ${cur_file_path} : '..\(.*\)')
     if [ "$verbose" = "true" ]; then
       echo "M ${cur_file_path}" >> ${PATH_OUT_TMP}
       diff ${DIR_OLD}/${cur_file_path} ${DIR_NEW}/${cur_file_path} >> ${PATH_OUT_TMP}
@@ -161,7 +161,7 @@ if [ "${diff_finded}" = "true" ]; then
 
   else
     # 詳細出力モード以外の場合、パスでソートして表示
-    cat ${PATH_OUT_TMP} | sort -k 2
+    sort -k 2 ${PATH_OUT_TMP}
   fi
 
 else

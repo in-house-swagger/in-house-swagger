@@ -55,30 +55,26 @@ cmd=(
     -e SC2086
     -e SC2155
     -e SC2164
-    # FIXME at debian
-    -e SC1091
-    -e SC2001
-    -e SC2002
-    -e SC2003
-    -e SC2004
-    -e SC2005
-    -e SC2006
-    -e SC2010
-    -e SC2012
-    -e SC2013
-    -e SC2034
-    -e SC2038
-    -e SC2044
-    -e SC2046
-    -e SC2068
-    -e SC2115
-    -e SC2119
-    -e SC2120
-    -e SC2145
-    -e SC2166
+    # FIXME at 0.4.4
+    -e SC1091 # Not following: ./setenv: openFile: does not exist (No such file or directory)
+    -e SC2001 # See if you can use ${variable//search/replace} instead. echo ${_first_date} | sed -e 's|/||g' -> echo ${_first_date////}
+    -e SC2003 # expr is antiquated. Consider rewriting this using $((..)), ${} or [[ ]].
+    -e SC2005 # Useless echo? Instead of 'echo $(cmd)', just use 'cmd'
+    -e SC2010 # Don't use ls | grep. Use a glob or a for loop with a condition to allow non-alphanumeric filenames.
+    -e SC2012 # Use find instead of ls to better handle non-alphanumeric filenames
+    -e SC2013 # To read lines rather than words, pipe/redirect to a 'while read' loop.
+    -e SC2034 # DIR_CUR appears unused. Verify it or export it.
+    -e SC2038 # Use -print0/-0 or -exec + to allow for non-alphanumeric filenames.
+    -e SC2044 # For loops over find output are fragile. Use find -exec or a while read loop.
+    -e SC2046 # Quote this to prevent word splitting.
+    -e SC2068 # Double quote array expansions to avoid re-splitting elements.
+    -e SC2119 # Use log.add_indent "$@" if function's $1 should mean script's $1
+    -e SC2120 # log.add_indent references arguments, but none are ever passed.
+    -e SC2145 # Argument mixes string and array. Use * or separate argument.
+    -e SC2166 # Prefer [ p ] || [ q ] as [ p -o q ] is not well defined.
     # FIXME latest
-    -e SC1117
-    -e SC2181
+    -e SC1117 # Backslash is literal in "\n". Prefer explicit escaping: "\\n".
+    -e SC2181 # Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
     "${target_files[@]}"
 )
 

@@ -118,7 +118,7 @@ function log.add_indent() {
   if [ "${_count}" = "" ]; then
     _count=1
   fi
-  LOG__INDENT_COUNT=$(( LOG__INDENT_COUNT + ${_count} ))
+  LOG__INDENT_COUNT=$(( LOG__INDENT_COUNT + _count ))
 }
 #---------------------------------------------------------------------------------------------------
 # インデント削除
@@ -132,7 +132,7 @@ function log.remove_indent() {
   if [ "${_count}" = "" ]; then
     _count=1
   fi
-  LOG__INDENT_COUNT=$(( LOG__INDENT_COUNT - ${_count} ))
+  LOG__INDENT_COUNT=$(( LOG__INDENT_COUNT - _count ))
 }
 #---------------------------------------------------------------------------------------------------
 # インデントクリア
@@ -144,7 +144,7 @@ function log.clear_indent() {
 # インデント一時保存ディレクトリ ※PID毎に一意
 #---------------------------------------------------------------------------------------------------
 function log.local.get_stack_dir() {
-  echo "/tmp/`basename $0 .sh`_$$"
+  echo "/tmp/$(basename $0 .sh)_$$"
 }
 #---------------------------------------------------------------------------------------------------
 # インデント一時保存
@@ -905,7 +905,7 @@ function log.rotatelog_by_day() {
   local _cur_date=$(date ${LOG__FORMAT_DATE})
 
   # 最終行の日付
-  local _last_date=$(cat ${PATH_LOG} | grep "${LOG__GREP_FORMAT}" | tail -n 1 | cut -d " " -f 1)
+  local _last_date=$(grep "${LOG__GREP_FORMAT}" ${PATH_LOG} | tail -n 1 | cut -d " " -f 1)
   if [ "${_last_date}x" = "x" ]; then
     return ${EXITCODE_SUCCESS}
   fi
@@ -975,7 +975,7 @@ function log.rotatelog_by_day_first() {
   local _cur_date=$(date ${LOG__FORMAT_DATE})
 
   # 先頭行の日付
-  local _first_date=$(cat ${PATH_LOG} | grep "${LOG__GREP_FORMAT}" | head -n 1 | cut -d " " -f 1)
+  local _first_date=$(grep "${LOG__GREP_FORMAT}" ${PATH_LOG}| head -n 1 | cut -d " " -f 1)
   if [ "${_first_date}x" = "x" ]; then
     return ${EXITCODE_SUCCESS}
   fi

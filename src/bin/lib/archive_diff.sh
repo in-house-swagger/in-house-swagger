@@ -35,7 +35,7 @@
 # カレントディレクトリの移動
 cd $(cd $(dirname $0); pwd)
 
-CMDNAME=`basename $0`
+CMDNAME=$(basename $0)
 USAGE="Usage: ${CMDNAME} [-v] PATH_OLD PATH_NEW"
 
 # 終了コード
@@ -43,7 +43,7 @@ readonly EXITCODE_SUCCESS=0
 readonly EXITCODE_WARN=3
 readonly EXITCODE_ERROR=6
 
-DIR_CUR=`pwd`
+DIR_CUR=$(pwd)
 DIR_WORK=/tmp/${CMDNAME}_$$
 DIR_OLD=${DIR_WORK}/old
 DIR_NEW=${DIR_WORK}/new
@@ -235,7 +235,7 @@ fi
 mkdir -p ${DIR_TMP_ROOT}
 
 # 強制終了時の処理定義
-trap `rm -fr ${DIR_WORK}; exit ${EXITCODE_ERROR}` SIGHUP SIGINT SIGQUIT SIGTERM
+trap $(rm -fr ${DIR_WORK}; exit ${EXITCODE_ERROR}) SIGHUP SIGINT SIGQUIT SIGTERM
 
 #--------------------------------------------------------------------------------------------------
 # 本処理
