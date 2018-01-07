@@ -1,13 +1,64 @@
 language: ruby
+
 rvm:
-  - 2.3.4
-env:
-  - URL=https://github.com/redpen-cc/redpen/releases/download/redpen-1.10.1
+  - 2.2
+
+notifications:
+  webhooks:
+    urls:
+      # travis encrypt 'https://webhooks.gitter.im/e/xxxxxx' --add notifications.webhooks.urls
+      secure: B4NggPQifSS+xkfCa5dlEV6zNop4J1aiSXQDWR7eo9FW9AGrIheWg1r+qnNk5uByJrXh2yTvPMzEsEli58dP9QTaL9csUF/i1hzzfwZJ5f9Pc2flc/Kr2u6+IqVnsilfcmSPGhM5yHneoaPWNVRloTmk954OebYDDb40SuF1khydLOU35Nsr0WxOMp6GedDnLALXbvn96xIS5wFu45Qs/yGUxzvukbdjkZIGmgo20PJ+dUcDHN9wC8JhnVY1FkxJPRCHaTn31VbCZIy+EedgsiKWkha9uLdeRKau8oV2cqNEnl9kRQw/ArdQpJNh0xhsJemKVDXN6Z7tR6jIYjbtsGT6xaQdaLGgjvEqKgxP34Nsjr/JJ3FaGNeRtHJ/ALEAyeFqS09IlZ078LuZKmjnufIw0iBl0NX6/U9BL10W9Qa7cBk12oh8sllgjjQC/WjoU1nRUqEdhKSjBzq+tPuoXbVwtn58KiBunn8avgALYdZ2cQY71mSFY3gJtpMElE9tvOxAPRYDXVKuc0hPxVofz6cTXtPcy8hx0ZENXRvXBUnVEc9vZWR073BRVXjYPyczN/avA8W+JDnGfsopiHfC/WY2Zs4tUO4FITM0Hs38YQghl4BQd5xhxsoknylLt1Bg8uY7TJ6xiTF0qBEqUhttXu0FJaV+72GJpK+mlI+Y5cQ=
+    # options: [always|never|change]
+    on_start: never
+    on_success: change
+    on_failure: always
+    on_cancel: always
+    on_error: always
+
+before_install:
+  - 'REDPEN_URL="https://github.com/redpen-cc/redpen/releases/download"'
+  - 'REDPEN_VERSION="1.10.1"'
+  - 'DIR_CACHE="${HOME}/custom_cache"'
+
 install:
-  - wget -c $URL/redpen-1.10.1.tar.gz
-  - tar xvf redpen-1.10.1.tar.gz
-  - export PATH=$PATH:$PWD/redpen-distribution-1.10.1/bin
-  - gem install asciidoctor
+  # build/docs: redpen
+  - 'curl --request GET --location --continue-at - --create-dirs --output "${DIR_CACHE}/redpen-${REDPEN_VERSION}.tar.gz" "${REDPEN_URL}/redpen-${REDPEN_VERSION}/redpen-${REDPEN_VERSION}.tar.gz"'
+  - 'cd ${DIR_CACHE} && tar xf "./redpen-${REDPEN_VERSION}.tar.gz" && cd -'
+  - 'export PATH="$PATH:${DIR_CACHE}/redpen-distribution-${REDPEN_VERSION}/bin"'
+  # build/docs: asciidoctor
+  - 'gem install asciidoctor'
+
+before_script:
+  # CI Event判定
+  - EVENT="other"
+  - 'if [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ "${TRAVIS_BRANCH}" == "master" ]        && [ "${TRAVIS_TAG}" == "" ]; then EVENT="pr_created";    fi'
+  - 'if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_BRANCH}" == "master" ]        && [ "${TRAVIS_TAG}" == "" ]; then EVENT="master_pushed"; fi'
+  - 'if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_BRANCH}" == "${TRAVIS_TAG}" ] && [ "${TRAVIS_TAG}" != "" ]; then EVENT="tag_pushed";    fi'
+  - 'echo "EVENT               = ${EVENT}"'
+  - 'echo "TRAVIS_BRANCH       = ${TRAVIS_BRANCH}"'
+  - 'echo "TRAVIS_PULL_REQUEST = ${TRAVIS_PULL_REQUEST}"'
+  - 'echo "TRAVIS_TAG          = ${TRAVIS_TAG}"'
+
 script:
-  - ./build/build-docs.sh check     # RedPenを適用する
-  - ./build/build-docs.sh html      # 出力ドキュメント（HTML）の生成
+  - '"./build/ci_event/${EVENT}.sh"'
+
+cache:
+  directories:
+    - ${HOME}/.cache
+    - ${DIR_CACHE}
+
+#after_success:
+#  - 'echo "after_success"'
+#  - 'echo "TRAVIS_TEST_RESULT  = ${TRAVIS_TEST_RESULT}"'
+
+#after_failure:
+#  - 'echo "after_failure"'
+#  - 'echo "TRAVIS_TEST_RESULT  = ${TRAVIS_TEST_RESULT}"'
+
+after_script:
+  - 'echo "after_script"'
+  - 'echo "EVENT               = ${EVENT}"'
+  - 'echo "TRAVIS_BRANCH       = ${TRAVIS_BRANCH}"'
+  - 'echo "TRAVIS_PULL_REQUEST = ${TRAVIS_PULL_REQUEST}"'
+  - 'echo "TRAVIS_TAG          = ${TRAVIS_TAG}"'
+  - 'echo "TRAVIS_TEST_RESULT  = ${TRAVIS_TEST_RESULT}"'
