@@ -121,13 +121,6 @@ if [[ "${BINTRAY_TOKEN}x" = "x" ]]; then
   exit 1
 fi
 
-# releaseパッケージへの公開の場合
-if [[ "${package}" = "${BINTRAY_PKG_RELEASE}" ]] &&
-   [[ "${version}" != "${version//-SNAPSHOT/}" ]]; then
-  echo "SNAPSHOT version can not publish to the release package. version=${version}" >&2
-  exit 1
-fi
-
 
 #-------------------------------------------------------------------------------
 # オプション解析
@@ -153,6 +146,13 @@ while :; do
       ;;
   esac
 done
+
+# releaseパッケージへの公開の場合
+if [[ "${package}" = "${BINTRAY_PKG_RELEASE}" ]] &&
+   [[ "${version}" != "${version//-SNAPSHOT/}" ]]; then
+  echo "SNAPSHOT version can not publish to the release package. version=${version}" >&2
+  exit 1
+fi
 
 
 #---------------------------------------------------------------------------------------------------
