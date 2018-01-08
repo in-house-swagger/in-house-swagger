@@ -82,7 +82,7 @@ release_tag="v${release_version}"
 commit_message="${MSG_PREFIX_RELEASE}${release_tag}"
 
 echo ""
-update_version_file "${cur_version}" "${release_version}"
+echo "${release_version}" > "${PATH_VERSION}"
 
 echo ""
 add_git_config
