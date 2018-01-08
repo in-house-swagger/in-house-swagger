@@ -24,7 +24,12 @@ RUN apk update                                                                  
 
 COPY . /root/in-house-swagger/
 
-RUN ~/in-house-swagger/build/build-product.sh
+RUN wget https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz        && \
+    tar xvf shellcheck-latest.linux.x86_64.tar.xz
+RUN cp shellcheck-latest/shellcheck /usr/local/bin
+RUN chmod +x /usr/local/bin/shellcheck
+
+RUN ~/in-house-swagger/build/product/build.sh
 
 RUN cd ~                                                                                        && \
     tar xzf in-house-swagger/dist/in-house-swagger-with*.tar.gz                                 && \

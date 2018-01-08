@@ -43,7 +43,7 @@ fi
 function usage() {
   cat <<_EOT_
     Usage:
-      `basename $0` [Options] SWAGGER_CODEGEN_CLI_ARGS
+      $(basename $0) [Options] SWAGGER_CODEGEN_CLI_ARGS
 
     Description:
       カスタムlanguageを考慮して、swagger-codegen-cliを実行します。

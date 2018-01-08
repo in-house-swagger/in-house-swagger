@@ -99,7 +99,7 @@ function gen_ssh_server_key() {
   fi
 
   # キーの存在チェック
-  cat ${_PATH_KNOWN_HOSTS} | grep ${_ip} > /dev/null 2>&1
+  grep ${_ip} ${_PATH_KNOWN_HOSTS} > /dev/null 2>&1
   _ret_code=$?
   if [ ${_ret_code} -eq 0 ]; then
     echo "${_ip} のSSHサーバキーは既に存在します。"
