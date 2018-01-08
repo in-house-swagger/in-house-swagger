@@ -31,7 +31,7 @@ archive_name="in-house-swagger-${version}.tar.gz"
 archive_name="in-house-swagger-with-depends-${version}.tar.gz"
 
 # ダウンロードURL
-url_base="https://dl.bintray.com/in-house-swagger/in-house-swagger/"
+url_base="https://dl.bintray.com/in-house-swagger/in-house-swagger"
 download_url="${url_base}/${archive_name}"
 
 # ダウンロード
