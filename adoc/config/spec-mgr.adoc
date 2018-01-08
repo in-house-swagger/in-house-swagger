@@ -1,0 +1,41 @@
+=== module/swagger-spec-mgr/config/
+
+==== swagger-spec-mgr.properties
+
+* デフォルトのコミット設定を変更する
+
+[source, bash]
+----
+export SCM_DEFAULT_USER="spec-mgr"
+export SCM_DEFAULT_EMAIL="spec-mgr@example.com"
+export SCM_DEFAULT_COMMIT_MESSAGE="update API specifications."
+----
+
+* Specの管理ディレクトリを変更する
+
+[source, bash]
+----
+# リポジトリルートからのSpec管理ディレクトリ相対パス
+export RELDIR_SPECS="docs/design/swagger"
+----
+
+
+==== application.yml
+
+* Specの分割除外設定を変更する
+
+[source, yaml]
+----
+  # 分割除外パス正規表現リスト
+  splitIgnoreRegexList:
+  - "/info/.*"
+  - "/tags/.*"
+  - "/schemas/.*"
+  - "/securityDefinitions/.*"
+  - "/paths/.*/consumes"
+  - "/paths/.*/parameters"
+  - "/paths/.*/produces"
+  - "/paths/.*/responses"
+  - "/paths/.*/tags"
+  - "/paths/.*/security"
+----

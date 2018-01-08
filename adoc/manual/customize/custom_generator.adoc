@@ -1,0 +1,67 @@
+==== Custom Generator
+
+===== Java
+
+swagger-codegenで提供されているカスタマイズ方法です。
+buildしたjarを config/generators 配下のディレクトリに配置すると
+bin/generate、swagger-editorのgenerate機能 で利用できます。
+
+* スキャフォルドの生成
+
+[source, bash]
+----
+bin/generate meta \
+  -o path/to/yourCustomGeneratorWorkspace \
+  -n yourCustomGeneratorName \
+  -p com.domain.your
+----
+
+* Generator, Templateの実装
+** https://github.com/swagger-api/swagger-codegen#making-your-own-codegen-modules
+** https://github.com/swagger-api/swagger-codegen/wiki/How-to-add-a-generator-for-a-new-language-or-framework
+
+* ビルド
+
+[source, bash]
+----
+cd path/to/yourCustomGeneratorWorkspace/
+mvn package
+----
+
+* 配置
+
+[source, bash]
+----
+cd ${IN-HOUSE-SWAGGER_HOME}
+mkdir config/generators/yourCustomGeneratorName
+mv path/to/yourCustomGeneratorWorkspace/target/yourCustomGeneratorName_*.jar config/generators/yourCustomGeneratorName/
+----
+
+* serverの再起動 ※Editorから利用する場合
+
+[source, bash]
+----
+bin/server restart
+----
+
+
+===== Groovy
+
+* Groovy実装
+
+[source, bash]
+----
+mkdir -p config/generators/yourCustomGeneratorName/generator
+touch config/generators/yourCustomGeneratorName/generator/yourCustomGeneratorName.groovy
+----
+
+* Template実装
+
+[source, bash]
+----
+mkdir config/generators/yourCustomGeneratorName/template
+cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomGeneratorName/template/
+----
+
+* 参考リンク
+** https://qiita.com/Quramy/items/c583f3213f0b77ff1bac

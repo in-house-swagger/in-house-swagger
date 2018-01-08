@@ -1,0 +1,5 @@
+=== Customize
+
+include::custom_template.adoc[]
+
+include::custom_generator.adoc[]

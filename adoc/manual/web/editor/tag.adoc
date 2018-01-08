@@ -1,0 +1,23 @@
+===== Git Tagの管理
+
+image::editor/menu_tag.png[]
+
+====== タグの追加
+
+. Tag > Add Tag をクリック
+. From GitObject を選択
+. Add Tag Name を入力
+. Create ボタンをクリック
+
+====== タグのリネーム
+
+. Tag > Rename Tag をクリック
+. From Tag を選択
+. To Tag Name を入力
+. Rename ボタンをクリック
+
+====== タグの削除
+
+. Tag > Delete Tag をクリック
+. Tag を選択
+. Delete ボタンをクリック

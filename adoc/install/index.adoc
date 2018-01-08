@@ -1,0 +1,96 @@
+== Installation
+
+=== Target OS
+
+* RHEL-derivatives / Fedora
+* Debian / Ubuntu
+* OSX
+
+=== Dependencies
+
+[format="csv", options="header"]
+|===
+include::dependencies.csv[]
+|===
+
+
+=== Getting Started
+
+- バージョンを選択
+** 最新安定版バージョンの場合: ```version="{Version}"```
+
+
+- ダウンロード
+
+[source, bash]
+----
+# アーカイブを選択
+#   通常版 ※installコマンド実行時にモジュールをダウンロード
+archive_name="in-house-swagger-${version}.tar.gz"
+#   モジュール同梱版
+archive_name="in-house-swagger-with-depends-${version}.tar.gz"
+
+# ダウンロードURL
+url_base="https://dl.bintray.com/in-house-swagger/in-house-swagger/"
+download_url="${url_base}/${archive_name}"
+
+# ダウンロード
+curl \
+  --request GET \
+  --url "${download_url}" \
+  --output "${archive_name}"
+----
+
+
+- インストール
+
+[source, bash]
+----
+tar xf "${archive_name}"
+cd "$(basename ${archive_name} .tar.gz)/"
+bin/install
+----
+
+
+- gitリモートリポジトリを利用する場合のみ実施
+
+[source, bash]
+----
+# リモートリポジトリURLを設定
+{
+  echo "export GIT_REMOTE_REPOSITORY_URL=${YOUR_REPO_URL}"
+} >> module/swagger-spec-mgr/config/swagger-spec-mgr.properties
+
+# 接続情報の暗号化
+{
+  echo "GIT_ACCESS_USER=${YOUR_REPO_USER}"
+  echo "GIT_ACCESS_PASSWORD=${YOUR_REPO_PASSWORD}"
+} > module/swagger-spec-mgr/config/access_info
+module/swagger-spec-mgr/bin/mainte/encrypt_access_info.sh
+----
+
+
+- デフォルトのgitコミットユーザを登録
+
+[source, bash]
+----
+module/swagger-spec-mgr/bin/git/clone.sh
+----
+
+
+- Server起動
+
+[source, bash]
+----
+bin/server start
+----
+
+
+- swagger-editor URL
+** http://localhost:9700/editor
+
+- swagger-ui URL
+** http://localhost:9700/ui
+
+- spec-mgr URL
+** http://localhost:9701

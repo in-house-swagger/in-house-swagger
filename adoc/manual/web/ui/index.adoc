@@ -1,0 +1,10 @@
+==== Swagger UI
+
+TIP: デフォルト設定の場合、 http://localhost:9700/ui でアクセスできます。
+
+===== spec-mgrで管理しているOASの定義を表示する
+
+. headerのURLを http://localhost:9701/specs/${SPEC_ID} に変更
+. Explore ボタンをクリック
+
+image::ui/ui_spec-mgr.png[]

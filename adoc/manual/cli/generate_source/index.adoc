@@ -1,0 +1,82 @@
+==== bin/generate
+
+codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage（Generator） の考慮を加えた薄いwrapperです。
+codegen-cli自体の利用方法は https://github.com/swagger-api/swagger-codegen[codegen-cliのマニュアル] で確認してください。
+
+===== Language（Generator）のオプションを確認する
+
+[source, bash]
+----
+TARGET_LANGUAGE="typescript-angular"
+
+bin/generate \
+  config-help \
+  -l ${TARGET_LANGUAGE}
+----
+
+===== 組み込みLanguage（Generator）でリソースを生成する
+
+[source, bash]
+----
+SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+
+bin/generate \
+  generate \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -l ${TARGET_LANGUAGE} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f
+----
+
+===== 組み込みLanguage（Generator） + カスタムTemplate でリソースを生成する
+
+[source, bash]
+----
+SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+CUSTOM_TEMPLATE="CustomTemplateName"
+
+bin/generate \
+  generate \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -l ${TARGET_LANGUAGE} \
+  -t config/templates/${CUSTOM_TEMPLATE} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f
+----
+
+===== カスタムLanguage（Generator） Jar形式 でリソースを生成する
+
+[source, bash]
+----
+SPEC_ID="sample"
+TARGET_LANGUAGE="CustomLanguageName"
+
+bin/generate \
+  -cl ${TARGET_LANGUAGE} \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f
+----
+
+===== カスタムLanguage（Generator） Groovy形式 でリソースを生成する
+
+[source, bash]
+----
+TARGET_LANGUAGE="CustomLanguageNameGroovy"
+
+bin/generate \
+  -cl ${TARGET_LANGUAGE} \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f
+----

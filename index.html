@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.4">
+<title>in-house-swagger 0.5.0-SNAPSHOT</title>
+<link rel="stylesheet" href="./stylesheets/readthedocs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>in-house-swagger 0.5.0-SNAPSHOT</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_overview">1. Overview</a>
+<ul class="sectlevel2">
+<li><a href="#_feature">1.1. Feature</a></li>
+<li><a href="#_workflow">1.2. Workflow</a></li>
+<li><a href="#_architecture">1.3. Architecture</a></li>
+<li><a href="#_licenses">1.4. Licenses</a></li>
+</ul>
+</li>
+<li><a href="#_installation">2. Installation</a>
+<ul class="sectlevel2">
+<li><a href="#_target_os">2.1. Target OS</a></li>
+<li><a href="#_dependencies">2.2. Dependencies</a></li>
+<li><a href="#_getting_started">2.3. Getting Started</a></li>
+</ul>
+</li>
+<li><a href="#_configuration">3. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_config">3.1. config/</a>
+<ul class="sectlevel3">
+<li><a href="#_project_properties">3.1.1. project.properties</a></li>
+</ul>
+</li>
+<li><a href="#_module_swagger_spec_mgr_config">3.2. module/swagger-spec-mgr/config/</a>
+<ul class="sectlevel3">
+<li><a href="#_swagger_spec_mgr_properties">3.2.1. swagger-spec-mgr.properties</a></li>
+<li><a href="#_application_yml">3.2.2. application.yml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_manual">4. Manual</a>
+<ul class="sectlevel2">
+<li><a href="#_web">4.1. Web</a>
+<ul class="sectlevel3">
+<li><a href="#_server_control">4.1.1. Server Control</a></li>
+<li><a href="#_swagger_editor">4.1.2. Swagger Editor</a></li>
+<li><a href="#_swagger_ui">4.1.3. Swagger UI</a></li>
+</ul>
+</li>
+<li><a href="#_cli">4.2. CLI</a>
+<ul class="sectlevel3">
+<li><a href="#_bin_generate">4.2.1. bin/generate</a></li>
+<li><a href="#_module_swagger_spec_mgr_bin_git">4.2.2. module/swagger-spec-mgr/bin/git/</a></li>
+</ul>
+</li>
+<li><a href="#_generate_specification">4.3. Generate Specification</a></li>
+<li><a href="#_customize">4.4. Customize</a>
+<ul class="sectlevel3">
+<li><a href="#_custom_template">4.4.1. Custom Template</a></li>
+<li><a href="#_custom_generator">4.4.2. Custom Generator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_overview">1. Overview</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="./images/overview.png" alt="overview">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feature">1.1. Feature</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>swagger tools（editor, generator, ui, validator, codegen-cli）, swagger2markup, spec-mgr を一括インストール</p>
+</li>
+<li>
+<p>generator、codegen-cli のカスタマイズ内容をconfigディレクトリで一元管理</p>
+</li>
+<li>
+<p>editorから、generator optionを指定してリソースを自動生成</p>
+</li>
+<li>
+<p><a href="https://github.com/OAI/OpenAPI-Specification">Open API Specification（OAS）</a> を、json-refsで分割管理</p>
+</li>
+<li>
+<p><a href="https://github.com/OAI/OpenAPI-Specification">Open API Specification（OAS）</a> を、Git管理（branch, tag, commit user, commit message）</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor_github-flow.gif" alt="editor github flow">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_workflow">1.2. Workflow</h3>
+<div class="imageblock">
+<div class="content">
+<img src="./images/workflow.png" alt="workflow">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_architecture">1.3. Architecture</h3>
+<div class="imageblock">
+<div class="content">
+<img src="./images/architecture.png" alt="architecture">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_licenses">1.4. Licenses</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">product</th>
+<th class="tableblock halign-left valign-top">license</th>
+<th class="tableblock halign-left valign-top">message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in-house-swagger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/in-house-swagger/in-house-swagger/blob/master/LICENSE">Apache License 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger-editor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/swagger-api/swagger-editor/blob/master/LICENSE">Apache License 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/in-house-swagger/swagger-editor/compare/master&#8230;&#8203;in-house-swagger:feature/in-house">changes</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger-ui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/swagger-api/swagger-ui/blob/master/LICENSE">Apache License 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/in-house-swagger/swagger-ui/compare/master&#8230;&#8203;in-house-swagger:feature/in-house">changes</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger-codegen</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/swagger-api/swagger-codegen/blob/master/LICENSE">Apache License 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Swagger2Markup/swagger2markup/blob/master/LICENSE.txt">Apache License 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger-spec-mgr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/in-house-swagger/swagger-spec-mgr/blob/master/LICENSE">Apache License 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Smashicons</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://file000.flaticon.com/downloads/license/license.pdf">Flaticon Basic License</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">image icons designed by Smashicons from Flaticon</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation">2. Installation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_target_os">2.1. Target OS</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>RHEL-derivatives / Fedora</p>
+</li>
+<li>
+<p>Debian / Ubuntu</p>
+</li>
+<li>
+<p>OSX</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependencies">2.2. Dependencies</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">command</th>
+<th class="tableblock halign-left valign-top">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">curl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">md5sum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sha1sum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gpg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">git</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.7 or later</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jre 8 or later</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_getting_started">2.3. Getting Started</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>バージョンを選択</p>
+<div class="ulist">
+<ul>
+<li>
+<p>最新安定版バージョンの場合: <code><code>version="0.5.0-SNAPSHOT"</code></code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>ダウンロード</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># アーカイブを選択
+#   通常版 ※installコマンド実行時にモジュールをダウンロード
+archive_name="in-house-swagger-${version}.tar.gz"
+#   モジュール同梱版
+archive_name="in-house-swagger-with-depends-${version}.tar.gz"
+
+# ダウンロードURL
+url_base="https://dl.bintray.com/in-house-swagger/in-house-swagger/"
+download_url="${url_base}/${archive_name}"
+
+# ダウンロード
+curl \
+  --request GET \
+  --url "${download_url}" \
+  --output "${archive_name}"</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>インストール</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">tar xf "${archive_name}"
+cd "$(basename ${archive_name} .tar.gz)/"
+bin/install</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>gitリモートリポジトリを利用する場合のみ実施</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># リモートリポジトリURLを設定
+{
+  echo "export GIT_REMOTE_REPOSITORY_URL=${YOUR_REPO_URL}"
+} &gt;&gt; module/swagger-spec-mgr/config/swagger-spec-mgr.properties
+
+# 接続情報の暗号化
+{
+  echo "GIT_ACCESS_USER=${YOUR_REPO_USER}"
+  echo "GIT_ACCESS_PASSWORD=${YOUR_REPO_PASSWORD}"
+} &gt; module/swagger-spec-mgr/config/access_info
+module/swagger-spec-mgr/bin/mainte/encrypt_access_info.sh</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>デフォルトのgitコミットユーザを登録</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">module/swagger-spec-mgr/bin/git/clone.sh</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Server起動</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">bin/server start</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>swagger-editor URL</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:9700/editor" class="bare">http://localhost:9700/editor</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>swagger-ui URL</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:9700/ui" class="bare">http://localhost:9700/ui</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>spec-mgr URL</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:9701" class="bare">http://localhost:9701</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration">3. Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_config">3.1. config/</h3>
+<div class="sect3">
+<h4 id="_project_properties">3.1.1. project.properties</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>起動ポートを変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># default: 9700
+# spec-mgr port: SERVER_PORT + 1
+SERVER_PORT=9700</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>jettyの起動パラメータを変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># jetty起動引数
+JETTY_ARGS="jetty.http.port=${SERVER_PORT}"</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>利用ツールのバージョンを変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ダウンロードURL
+DOWNLOAD_URL_JETTY="http://central.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.6.v20170531/jetty-distribution-9.4.6.v20170531.tar.gz"
+DOWNLOAD_URL_GROOVY="https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.12.zip"
+DOWNLOAD_URL_CODEGEN_CLI="http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.2.3/swagger-codegen-cli-2.2.3.jar"
+ :</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>利用ツールのダウンロード検証ハッシュを変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ダウンロード検証(md5/sha1/bintray:project名/なし)
+CHECKSUM_JETTY=md5
+CHECKSUM_GROOVY=bintray:groovy
+CHECKSUM_CODEGEN_CLI=md5
+ :</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_module_swagger_spec_mgr_config">3.2. module/swagger-spec-mgr/config/</h3>
+<div class="sect3">
+<h4 id="_swagger_spec_mgr_properties">3.2.1. swagger-spec-mgr.properties</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>デフォルトのコミット設定を変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export SCM_DEFAULT_USER="spec-mgr"
+export SCM_DEFAULT_EMAIL="spec-mgr@example.com"
+export SCM_DEFAULT_COMMIT_MESSAGE="update API specifications."</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Specの管理ディレクトリを変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># リポジトリルートからのSpec管理ディレクトリ相対パス
+export RELDIR_SPECS="docs/design/swagger"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_application_yml">3.2.2. application.yml</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Specの分割除外設定を変更する</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">  # 分割除外パス正規表現リスト
+  splitIgnoreRegexList:
+  - "/info/.*"
+  - "/tags/.*"
+  - "/schemas/.*"
+  - "/securityDefinitions/.*"
+  - "/paths/.*/consumes"
+  - "/paths/.*/parameters"
+  - "/paths/.*/produces"
+  - "/paths/.*/responses"
+  - "/paths/.*/tags"
+  - "/paths/.*/security"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_manual">4. Manual</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_web">4.1. Web</h3>
+<div class="sect3">
+<h4 id="_server_control">4.1.1. Server Control</h4>
+<div class="sect4">
+<h5 id="_起動">起動</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">bin/server start</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_停止">停止</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">bin/server stop</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_再起動">再起動</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">bin/server restart</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_swagger_editor">4.1.2. Swagger Editor</h4>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+デフォルト設定の場合、 <a href="http://localhost:9700/editor" class="bare">http://localhost:9700/editor</a> でアクセスできます。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_specの管理">Specの管理</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_file.png" alt="menu file">
+</div>
+</div>
+<div class="sect5">
+<h6 id="_開く">開く</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Open をクリック</p>
+</li>
+<li>
+<p>SpecID を選択</p>
+</li>
+<li>
+<p>Open ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_新規保存">新規保存</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Save as&#8230;&#8203; をクリック</p>
+</li>
+<li>
+<p>SpecID を入力</p>
+</li>
+<li>
+<p>Create ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_上書き保存">上書き保存</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Save をクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_削除">削除</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Delete をクリック</p>
+</li>
+<li>
+<p>SpecID を選択</p>
+</li>
+<li>
+<p>Delete ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_urlを編集画面にimport">URLを編集画面にimport</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Import URL をクリック</p>
+</li>
+<li>
+<p>Specの公開URLを入力</p>
+</li>
+<li>
+<p>Import ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ローカルファイルを編集画面にimport">ローカルファイルを編集画面にimport</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Import File をクリック</p>
+</li>
+<li>
+<p>ファイルを選択</p>
+</li>
+<li>
+<p>Import ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_編集内容をyamlフォーマットでダウンロード">編集内容をyamlフォーマットでダウンロード</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Download YAML をクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_編集内容をjsonフォーマットでダウンロード">編集内容をjsonフォーマットでダウンロード</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File &gt; Download JSON をクリック</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_編集">編集</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_edit.png" alt="menu edit">
+</div>
+</div>
+<div class="sect5">
+<h6 id="_編集中の定義をjsonからyamlに変換する">編集中の定義をjsonからyamlに変換する</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Edit &gt; Convert to YAML をクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_編集中の定義をクリアする">編集中の定義をクリアする</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Edit &gt; Clear editor をクリック</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_git_branchの管理">Git Branchの管理</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_branch.png" alt="menu branch">
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチの追加">ブランチの追加</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Branch &gt; Add Branch をクリック</p>
+</li>
+<li>
+<p>From GitObject を選択</p>
+</li>
+<li>
+<p>Add Branch Name を入力</p>
+</li>
+<li>
+<p>Create ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチのリネーム">ブランチのリネーム</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Branch &gt; Rename Branch をクリック</p>
+</li>
+<li>
+<p>From Branch を選択</p>
+</li>
+<li>
+<p>To Branch Name を入力</p>
+</li>
+<li>
+<p>Rename ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチの削除">ブランチの削除</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Branch &gt; Delete Branch をクリック</p>
+</li>
+<li>
+<p>Branch を選択</p>
+</li>
+<li>
+<p>Delete ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチの切り替え">ブランチの切り替え</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Branch &gt; Switch Branch をクリック</p>
+</li>
+<li>
+<p>Branch を選択</p>
+</li>
+<li>
+<p>Switch ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチ間マージ">ブランチ間マージ</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Branc &gt; Merge Branch をクリック</p>
+</li>
+<li>
+<p>From Branch を選択</p>
+</li>
+<li>
+<p>To Branch を選択</p>
+</li>
+<li>
+<p>Merge ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_git_tagの管理">Git Tagの管理</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_tag.png" alt="menu tag">
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグの追加">タグの追加</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Tag &gt; Add Tag をクリック</p>
+</li>
+<li>
+<p>From GitObject を選択</p>
+</li>
+<li>
+<p>Add Tag Name を入力</p>
+</li>
+<li>
+<p>Create ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグのリネーム">タグのリネーム</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Tag &gt; Rename Tag をクリック</p>
+</li>
+<li>
+<p>From Tag を選択</p>
+</li>
+<li>
+<p>To Tag Name を入力</p>
+</li>
+<li>
+<p>Rename ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグの削除">タグの削除</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Tag &gt; Delete Tag をクリック</p>
+</li>
+<li>
+<p>Tag を選択</p>
+</li>
+<li>
+<p>Delete ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_git_commit_userの管理">Git Commit Userの管理</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_user.png" alt="menu user">
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Gitリモートリポジトリを利用しない場合、ユーザごとに異なるローカルリポジトリが作成されます。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_コミットユーザの追加">コミットユーザの追加</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User &gt; Add User をクリック</p>
+</li>
+<li>
+<p>id を入力</p>
+</li>
+<li>
+<p>email を入力</p>
+</li>
+<li>
+<p>Create ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_コミットユーザの削除">コミットユーザの削除</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User &gt; Delete User をクリック</p>
+</li>
+<li>
+<p>User を選択</p>
+</li>
+<li>
+<p>Delete ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_コミットユーザの切り替え">コミットユーザの切り替え</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User &gt; Switch User をクリック</p>
+</li>
+<li>
+<p>User を選択</p>
+</li>
+<li>
+<p>Change ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_コミットメッセージの変更">コミットメッセージの変更</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User &gt; Commit Msg をクリック</p>
+</li>
+<li>
+<p>message を入力</p>
+</li>
+<li>
+<p>Save ボタンをクリック</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_generate">Generate</h5>
+<div class="paragraph">
+<p>Language（Generator）毎に対応しているオプションを指定できます。</p>
+</div>
+<div class="sect5">
+<h6 id="_serverリソースの生成">Serverリソースの生成</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>generate server &gt; 対象のLanguage（Generator） をクリック</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_generate_server.png" alt="menu generate server">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>popup.左ペイン.Option Definition をクリック</p>
+</li>
+<li>
+<p>指定できるオプションを確認</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/popup_generate_server_def.png" alt="popup generate server def">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>popup.左ペイン.Option Value をクリック</p>
+</li>
+<li>
+<p>オプションを設定</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/popup_generate_server_value.png" alt="popup generate server value">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Generate ボタンをクリック</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_clientリソースの生成">Clientリソースの生成</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>generate client &gt; 対象のLanguage（Generator） をクリック</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/editor/menu_generate_client.png" alt="menu generate client">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>popup.左ペイン.Option Definition をクリック</p>
+</li>
+<li>
+<p>指定できるオプションを確認</p>
+</li>
+<li>
+<p>popup.左ペイン.Option Value をクリック</p>
+</li>
+<li>
+<p>オプションを設定</p>
+</li>
+<li>
+<p>Generate ボタンをクリック</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_swagger_ui">4.1.3. Swagger UI</h4>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+デフォルト設定の場合、 <a href="http://localhost:9700/ui" class="bare">http://localhost:9700/ui</a> でアクセスできます。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_spec_mgrで管理しているoasの定義を表示する">spec-mgrで管理しているOASの定義を表示する</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>headerのURLを <a href="http://localhost:9701/specs/${SPEC_ID}" class="bare">http://localhost:9701/specs/${SPEC_ID}</a> に変更</p>
+</li>
+<li>
+<p>Explore ボタンをクリック</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ui/ui_spec-mgr.png" alt="ui spec mgr">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cli">4.2. CLI</h3>
+<div class="sect3">
+<h4 id="_bin_generate">4.2.1. bin/generate</h4>
+<div class="paragraph">
+<p>codegen-cli の呼び出しに、カスタムTemplate, カスタムLanguage（Generator） の考慮を加えた薄いwrapperです。
+codegen-cli自体の利用方法は <a href="https://github.com/swagger-api/swagger-codegen">codegen-cliのマニュアル</a> で確認してください。</p>
+</div>
+<div class="sect4">
+<h5 id="_language_generator_のオプションを確認する">Language（Generator）のオプションを確認する</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">TARGET_LANGUAGE="typescript-angular"
+
+bin/generate \
+  config-help \
+  -l ${TARGET_LANGUAGE}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_組み込みlanguage_generator_でリソースを生成する">組み込みLanguage（Generator）でリソースを生成する</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+
+bin/generate \
+  generate \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -l ${TARGET_LANGUAGE} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_組み込みlanguage_generator_カスタムtemplate_でリソースを生成する">組み込みLanguage（Generator） + カスタムTemplate でリソースを生成する</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">SPEC_ID="sample"
+TARGET_LANGUAGE="typescript-angular"
+CUSTOM_TEMPLATE="CustomTemplateName"
+
+bin/generate \
+  generate \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -l ${TARGET_LANGUAGE} \
+  -t config/templates/${CUSTOM_TEMPLATE} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_カスタムlanguage_generator_jar形式_でリソースを生成する">カスタムLanguage（Generator） Jar形式 でリソースを生成する</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">SPEC_ID="sample"
+TARGET_LANGUAGE="CustomLanguageName"
+
+bin/generate \
+  -cl ${TARGET_LANGUAGE} \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_カスタムlanguage_generator_groovy形式_でリソースを生成する">カスタムLanguage（Generator） Groovy形式 でリソースを生成する</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">TARGET_LANGUAGE="CustomLanguageNameGroovy"
+
+bin/generate \
+  -cl ${TARGET_LANGUAGE} \
+  -i http://localhost:9701/specs/${SPEC_ID} \
+  -o output/${TARGET_LANGUAGE}
+
+# 結果確認
+find output/${TARGET_LANGUAGE} -type f</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_module_swagger_spec_mgr_bin_git">4.2.2. module/swagger-spec-mgr/bin/git/</h4>
+<div class="sect4">
+<h5 id="_user追加_clone_init">User追加（clone/init）</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># リポジトリ初期化処理
+#   GIT_REMOTE_REPOSITORY_URL が定義されている場合、git clone
+#   定義されていない場合、git init を実行します。
+#
+# 引数
+#   1: コミットユーザ      ※任意
+#   2: コミットユーザemail ※任意
+#
+# オプション
+#   -f | --force: 強制初期化モード
+#     Git作業ディレクトリが既に存在する場合、削除してから初期化します。
+#
+module/swagger-spec-mgr/bin/git/clone.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_remoteリポジトリ設定">remoteリポジトリ設定</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># remote origin設定処理
+#
+# 引数
+#   1: リモートリポジトリURL
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/add_origin.sh REMOTE_URL</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_コミット操作">コミット操作</h5>
+<div class="sect5">
+<h6 id="_commit_pull">commit/pull</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># リポジトリ更新取得処理
+#   リモートリポジトリ が設定されている場合、カレントブランチで、git pull
+#   定義されていない場合、スキップします。
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/pull.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_push">push</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># リポジトリ更新反映処理
+#   リモートリポジトリ が設定されている場合、git commit &amp; push
+#   定義されていない場合、git commit だけを実行します。
+#
+# 引数
+#   1: コミットコメント
+#   2: コミットユーザ   ※任意
+#
+module/swagger-spec-mgr/bin/git/push.sh MESSAGE</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_ブランチ操作">ブランチ操作</h5>
+<div class="sect5">
+<h6 id="_ブランチ一覧">ブランチ一覧</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチ一覧取得処理
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_list.sh 2&gt;/dev/null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチ存在確認">ブランチ存在確認</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチ存在確認処理
+#
+# 引数
+#   1: 対象ブランチ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_is_exist.sh BRANCH 2&gt;/dev/null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_カレントブランチ確認">カレントブランチ確認</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># 現在ブランチ存在確認処理
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_get_current.sh 2&gt;/dev/null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチ切り替え">ブランチ切り替え</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチ切り替え処理
+#
+# 引数
+#   1: 切り替え先ブランチ
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/switch.sh BRANCH</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチ追加">ブランチ追加</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチ追加処理
+#
+# 引数
+#   1: 作成元（ブランチ or タグ or コミットハッシュ）
+#   2: 対象ブランチ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_add.sh FROM TO</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチリネーム">ブランチリネーム</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチリネーム処理
+#
+# 引数
+#   1: リネーム元ブランチ名
+#   2: リネーム先ブランチ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_rename.sh FROM TO</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチ削除">ブランチ削除</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチ削除処理
+#
+# 引数
+#   1: 対象ブランチ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_remove.sh BRANCH</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_ブランチマージ">ブランチマージ</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># ブランチ間マージ処理
+#
+# 引数
+#   1: マージ元ブランチ名
+#   2: マージ先ブランチ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/branch_merge.sh FROM TO</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_タグ操作">タグ操作</h5>
+<div class="sect5">
+<h6 id="_タグ一覧">タグ一覧</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># タグ一覧取得処理
+#
+# 引数
+#   1: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_list.sh 2&gt;/dev/null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグ存在確認">タグ存在確認</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># タグ存在確認処理
+#
+# 引数
+#   1: 対象タグ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_is_exist.sh TAG 2&gt;/dev/null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグ追加">タグ追加</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># タグ追加処理
+#
+# 引数
+#   1: 作成元（ブランチ or タグ or コミットハッシュ）
+#   2: 対象タグ名
+#   3: タグメッセージ
+#   4: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_add.sh FROM TO MESSAGE</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグリネーム">タグリネーム</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># タグリネーム処理
+#
+# 引数
+#   1: リネーム元タグ名
+#   2: リネーム先タグ名
+#   3: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_rename.sh FROM TO</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_タグ削除">タグ削除</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"># タグ削除処理
+#
+# 引数
+#   1: 対象タグ名
+#   2: コミットユーザ ※任意
+#
+module/swagger-spec-mgr/bin/git/tag_remove.sh TAG</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generate_specification">4.3. Generate Specification</h3>
+<div class="paragraph">
+<p><a href="https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-JAX-RS-Project-Setup-1.5.X">swagger-core</a> で、ソースからOASを生成できます。</p>
+</div>
+<div class="paragraph">
+<p>各言語への拡張などは <a href="https://swagger.io/open-source-integrations/" class="bare">https://swagger.io/open-source-integrations/</a> で紹介されています。
+利用するツールの利用方法に従ってください。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_customize">4.4. Customize</h3>
+<div class="sect3">
+<h4 id="_custom_template">4.4.1. Custom Template</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Template実装</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mkdir config/templates/yourCustomTemplateName
+cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomTemplateName/</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>参考リンク</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://qiita.com/Quramy/items/c583f3213f0b77ff1bac" class="bare">https://qiita.com/Quramy/items/c583f3213f0b77ff1bac</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_generator">4.4.2. Custom Generator</h4>
+<div class="sect4">
+<h5 id="_java">Java</h5>
+<div class="paragraph">
+<p>swagger-codegenで提供されているカスタマイズ方法です。
+buildしたjarを config/generators 配下のディレクトリに配置すると
+bin/generate、swagger-editorのgenerate機能 で利用できます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>スキャフォルドの生成</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">bin/generate meta \
+  -o path/to/yourCustomGeneratorWorkspace \
+  -n yourCustomGeneratorName \
+  -p com.domain.your</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Generator, Templateの実装</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/swagger-api/swagger-codegen#making-your-own-codegen-modules" class="bare">https://github.com/swagger-api/swagger-codegen#making-your-own-codegen-modules</a></p>
+</li>
+<li>
+<p><a href="https://github.com/swagger-api/swagger-codegen/wiki/How-to-add-a-generator-for-a-new-language-or-framework" class="bare">https://github.com/swagger-api/swagger-codegen/wiki/How-to-add-a-generator-for-a-new-language-or-framework</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>ビルド</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd path/to/yourCustomGeneratorWorkspace/
+mvn package</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>配置</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd ${IN-HOUSE-SWAGGER_HOME}
+mkdir config/generators/yourCustomGeneratorName
+mv path/to/yourCustomGeneratorWorkspace/target/yourCustomGeneratorName_*.jar config/generators/yourCustomGeneratorName/</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>serverの再起動 ※Editorから利用する場合</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">bin/server restart</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_groovy">Groovy</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Groovy実装</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mkdir -p config/generators/yourCustomGeneratorName/generator
+touch config/generators/yourCustomGeneratorName/generator/yourCustomGeneratorName.groovy</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Template実装</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mkdir config/generators/yourCustomGeneratorName/template
+cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomGeneratorName/template/</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>参考リンク</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://qiita.com/Quramy/items/c583f3213f0b77ff1bac" class="bare">https://qiita.com/Quramy/items/c583f3213f0b77ff1bac</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2018-01-07 18:42:51 JST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+===== Git Branchの管理
+
+image::editor/menu_branch.png[]
+
+====== ブランチの追加
+
+. Branch > Add Branch をクリック
+. From GitObject を選択
+. Add Branch Name を入力
+. Create ボタンをクリック
+
+====== ブランチのリネーム
+
+. Branch > Rename Branch をクリック
+. From Branch を選択
+. To Branch Name を入力
+. Rename ボタンをクリック
+
+====== ブランチの削除
+
+. Branch > Delete Branch をクリック
+. Branch を選択
+. Delete ボタンをクリック
+
+====== ブランチの切り替え
+
+. Branch > Switch Branch をクリック
+. Branch を選択
+. Switch ボタンをクリック
+
+====== ブランチ間マージ
+
+. Branc > Merge Branch をクリック
+. From Branch を選択
+. To Branch を選択
+. Merge ボタンをクリック

@@ -1,0 +1,5 @@
+== Configuration
+
+include::in-house-swagger.adoc[]
+
+include::spec-mgr.adoc[]
