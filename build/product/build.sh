@@ -85,12 +85,14 @@ rm -fr "${dir_dist_work:?}/lib/"
 rm -fr "${dir_dist_work:?}/module/"
 cd ${DIR_DIST}
 tar czf "./${archive_name_with_dpend}.tar.gz" "./${archive_name_with_dpend}"
+md5sum  "./${archive_name_with_dpend}.tar.gz" | cut -d ' ' -f 1 > "./${archive_name_with_dpend}.tar.gz.md5"
 
 echo ""
 echo "依存を含めない配布アーカイブの作成"
 rm -fr "${dir_dist_work:?}/archive/"
 mv "./${archive_name_with_dpend}" "./${archive_name}"
 tar czf "./${archive_name}.tar.gz" "./${archive_name}"
+md5sum  "./${archive_name}.tar.gz" | cut -d ' ' -f 1 > "./${archive_name}.tar.gz.md5"
 
 echo ""
 echo "作業ディレクトリの削除"

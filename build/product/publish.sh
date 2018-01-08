@@ -161,7 +161,7 @@ fi
 echo "$(basename $0)"
 retcode=0
 
-find "${DIR_DIST}" -type f | sort >"${_path_tmp_dist_list}"
+find "${DIR_DIST}" -mindepth 1 -maxdepth 1 -type f | sort >"${_path_tmp_dist_list}"
 for _cur_path in $(cat "${_path_tmp_dist_list}"); do
   (
     upload_bintray "${package}" "${version}" "${_cur_path}"
