@@ -76,24 +76,24 @@ echo ""
 ${DIR_BUILD}/product/build.sh
 exit_on_fail "product/build" $?
 
-_cur_version=$(get_version)
-_release_version="${_cur_version//-SNAPSHOT/}"
-_release_tag="v${_release_version}"
-_commit_message="${MSG_PREFIX_RELEASE}${_release_tag}"
+cur_version=$(cat "${PATH_VERSION}")
+release_version="${cur_version//-SNAPSHOT/}"
+release_tag="v${release_version}"
+commit_message="${MSG_PREFIX_RELEASE}${release_tag}"
 
 echo ""
-update_version_file "${_cur_version}" "${_release_version}"
+echo "${release_version}" > "${PATH_VERSION}"
 
 echo ""
 add_git_config
 
 echo "  git commit (before changelog)"
 git add --all .
-git commit -m "${_commit_message} (before changelog)"
+git commit -m "${commit_message} (before changelog)"
 exit_on_fail "git commit" $?
 
 echo "  git tag (before changelog)"
-git tag -a "${_release_tag}" -m "${_commit_message} (before changelog)"
+git tag -a "${release_tag}" -m "${commit_message} (before changelog)"
 exit_on_fail "git tag" $?
 
 
@@ -104,12 +104,12 @@ exit_on_fail "generate changelog" $?
 
 echo "  git commit"
 git add --all .
-git commit -m "${_commit_message}"
+git commit -m "${commit_message}"
 exit_on_fail "git commit" $?
 
 echo "  git tag"
-git tag -d "${_release_tag}"
-git tag -a "${_release_tag}" -m "${_commit_message}"
+git tag -d "${release_tag}"
+git tag -a "${release_tag}" -m "${commit_message}"
 exit_on_fail "git tag" $?
 
 
@@ -119,9 +119,9 @@ if [[ "${is_dry_run}" != "true" ]]; then
   git push origin "${BRANCH_MASTER}"
   exit_on_fail "git push branch ${BRANCH_MASTER}" $?
 
-  echo "  git push tag ${_release_tag}"
-  git push origin "${_release_tag}"
-  exit_on_fail "git push tag ${_release_tag}" $?
+  echo "  git push tag ${release_tag}"
+  git push origin "${release_tag}"
+  exit_on_fail "git push tag ${release_tag}" $?
 fi
 
 
