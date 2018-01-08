@@ -1,4 +1,5 @@
 .DS_Store
+.git_credential
 src/archive
 src/lib
 src/module
