@@ -214,8 +214,8 @@ function local.checksum() {
         local _bintray_publickey="https://bintray.com/user/downloadSubjectPublicKey?username=${_sum_user}"
         # import/merge publickey
         curl ${_bintray_publickey} -o ${_path_downloaded}.pubkey
-        gpg --import ${_path_downloaded}.pubkey
       fi
+      gpg --import ${_path_downloaded}.pubkey
       ;;
     *)
       log.info_console "検証をスキップしました。"
