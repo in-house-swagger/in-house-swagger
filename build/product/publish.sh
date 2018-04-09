@@ -167,9 +167,11 @@ for _cur_path in $(cat "${_path_tmp_dist_list}"); do
     upload_bintray "${package}" "${version}" "${_cur_path}"
     retcode=$?
     echo -n "${retcode}" >>"${_path_tmp_retcode_list}"
-  ) &
+  )
+# TODO with-dependsのtar.gz, md5だけ成功するので、並走をやめてみた。
+#  ) &
 done
-wait
+#wait
 
 
 #---------------------------------------------------------------------------------------------------
