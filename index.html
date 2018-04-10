@@ -274,6 +274,7 @@ download_url="${url_base}/${archive_name}"
 # ダウンロード
 curl \
   --request GET \
+  --location \
   --url "${download_url}" \
   --output "${archive_name}"</code></pre>
 </div>
@@ -1593,7 +1594,7 @@ cp -p config/templates/_default/JavaSpring/* config/generators/yourCustomGenerat
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-09 00:52:50 UTC
+Last updated 2018-04-10 00:46:59 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
