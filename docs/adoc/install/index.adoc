@@ -37,6 +37,7 @@ download_url="${url_base}/${archive_name}"
 # ダウンロード
 curl \
   --request GET \
+  --location \
   --url "${download_url}" \
   --output "${archive_name}"
 ----
