@@ -244,7 +244,7 @@ function local.checksum() {
     md5|sha1)
       # 確認用にハッシュリストを作成
       local _val=$(sed 's/^\([^ \t]*\)[ \t].*/\1/' ${_path_downloaded}.${_ext})
-      echo "${_val} ${_path_downloaded}" > /tmp/sum.$$
+      echo "${_val}  ${_path_downloaded}" > /tmp/sum.$$
       _command="${_sum_type}sum -c /tmp/sum.$$"
       ;;
     *)
